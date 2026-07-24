@@ -21,8 +21,8 @@ profile:
 socials:
   - icon: github
     href: https://github.com/Jaredanwolfgang
-  - icon: linkedin
-    href: https://www.linkedin.com/in/yicheng-xiao-b24b46389/
+  # - icon: linkedin
+  #   href: https://www.linkedin.com/in/yicheng-xiao-b24b46389/
   - icon: mail
     href: mailto:Jaredanjerry@gmail.com
   - icon: website
@@ -115,6 +115,9 @@ academic:
     - date: "2024.05"
       text: NUS SoC Workshop (Grade A)
   education:
+    - period: "2026 — Present"
+      school: Tsinghua University
+      detail: Master in Computer Science
     - period: "2022 — 2026"
       school: Southern University of Science and Technology (SUSTech)
       detail: B.S. in Computer Science · GPA 3.94/4.0 · Expected graduation 2026
