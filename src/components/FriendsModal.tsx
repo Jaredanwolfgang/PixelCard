@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Friend } from "@/lib/types";
 
@@ -12,14 +13,29 @@ export default function FriendsStat({
   friends: Friend[];
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <>
-      <button className="stat-btn" onClick={() => setOpen(true)}>
-        <div className="num">{count}</div>
-        <div className="lbl">朋友</div>
-      </button>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const modal =
+    mounted &&
+    createPortal(
       <AnimatePresence>
         {open && (
           <motion.div
@@ -66,7 +82,10 @@ export default function FriendsStat({
                         style={{ background: f.color }}
                       />
                     ) : (
-                      <span className="friend-avatar" style={{ background: f.color }}>
+                      <span
+                        className="friend-avatar"
+                        style={{ background: f.color }}
+                      >
                         {f.name[0]}
                       </span>
                     )}
@@ -81,7 +100,17 @@ export default function FriendsStat({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+    );
+
+  return (
+    <>
+      <button className="stat-btn" onClick={() => setOpen(true)}>
+        <div className="num">{count}</div>
+        <div className="lbl">朋友</div>
+      </button>
+      {modal}
     </>
   );
 }
