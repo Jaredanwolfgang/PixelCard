@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: pixelcard-web
+    ports:
+      - "3000:3000"
+    environment:
+      - ENGAGEMENT_URL=http://server:4000
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  server:
+    build: ./server
+    container_name: pixelcard-engagement
+    environment:
+      - PORT=4000
+      - DB_PATH=/app/data/engagement.db
+      - CORS_ORIGIN=*
+    volumes:
+      # 互动数据持久化（浏览 / 点赞 / 评论）
+      - ./data:/app/data
+    restart: unless-stopped

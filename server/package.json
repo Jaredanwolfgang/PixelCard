@@ -1,0 +1,15 @@
+{
+  "name": "pixelcard-engagement",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.8",
+    "better-sqlite3": "^12.2.0",
+    "hono": "^4.7.2"
+  }
+}

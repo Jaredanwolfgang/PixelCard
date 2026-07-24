@@ -1,0 +1,170 @@
+# PixelCard 全局配置 — Fork 后优先改这个文件
+# 社交 icon 可选: github | linkedin | mail | website | twitter | scholar | bilibili | rss
+# href 为空或不写则不显示该图标
+# 基本信息同步自 Blogs/_config.keep.yml + about 页
+
+site:
+  name: Jaredan
+  title: Daily Jaredan
+  description: 不要温和地走进那个良夜
+  copyright: "© 2024–2026 Jerry Xiao · Built with PixelCard"
+
+profile:
+  name: Yicheng Xiao
+  handle: "@Jaredanjerry"
+  bio: 不要温和地走进那个良夜
+  # 头像 / favicon 来自旧博客 source/images/
+  avatar: /avatar.jpg
+  location: Shenzhen / Berkeley
+  email: Jaredanjerry@gmail.com
+
+socials:
+  - icon: github
+    href: https://github.com/Jaredanwolfgang
+  - icon: linkedin
+    href: https://www.linkedin.com/in/yicheng-xiao-b24b46389/
+  - icon: mail
+    href: mailto:Jaredanjerry@gmail.com
+  - icon: website
+    href: https://jaredanwolfgang.github.io/
+
+tags:
+  - id: academic
+    name: 学术
+    nameEn: Academic
+    accent: "#4F6B8A"
+    accentSoft: "#EEF2F6"
+    coverFrom: "#E7ECF1"
+    coverTo: "#D3DCE5"
+    icons: ["∑", "∫", "π", "∂", "∇", "∞", "ℵ", "√"]
+  - id: projects
+    name: 项目
+    nameEn: Projects
+    accent: "#5E7A62"
+    accentSoft: "#F0F4EF"
+    coverFrom: "#EAF0E8"
+    coverTo: "#D5E0D1"
+    icons: ["</>", "{ }", "$", "git", "//", "==", "( )", "=>"]
+  - id: life
+    name: 生活
+    nameEn: Life
+    accent: "#A8823C"
+    accentSoft: "#F7F1E3"
+    coverFrom: "#F5EEDF"
+    coverTo: "#E9DCC2"
+    icons: ["☕", "✈", "♪", "✿", "☀", "❀", "☾", "✎"]
+  - id: essays
+    name: 随笔
+    nameEn: Essays
+    accent: "#B86A82"
+    accentSoft: "#F7EDF1"
+    coverFrom: "#F5E9EE"
+    coverTo: "#E9D3DD"
+    icons: ["❞", "✒", "✦", "❝", "✧", "✎", "~", "·"]
+  - id: tech
+    name: 技术
+    nameEn: Tech
+    accent: "#7D6B96"
+    accentSoft: "#F1EDF5"
+    coverFrom: "#EDE8F2"
+    coverTo: "#DBD1E4"
+    icons: ["⌘", "⚡", "⌥", "⎇", "◇", "◈", "λ", "ƒ"]
+
+friends:
+  - name: chanbengz
+    url: https://blog.benx.dev/
+    bio: Capture The Benben
+    color: "#E7ECF1"
+    avatar: https://avatars.githubusercontent.com/u/34162471?v=4
+  - name: EricYong
+    url: https://liuxy.space/
+    bio: Look for the Light
+    color: "#EAF0E8"
+    avatar: /friends/ericyong.jpg
+  - name: 笑到猝死的家伙
+    url: https://www.haibinlaiblog.top/
+    bio: 偶尔的单纯与天真，不是逃避现实，而是为了更有希望的生活
+    color: "#F5EEDF"
+    avatar: /friends/ggbond.png
+  - name: Dragon Xiaoxingchen
+    url: https://xiaoxingchendragon.github.io/
+    bio: 想成为旅行者,将触摸和所见的全部 都原本，珍重地接纳
+    color: "#F5E9EE"
+    avatar: /friends/xiaoxingchendragon.png
+  - name: Jack Tianyu Li
+    url: https://jacktianyuli.github.io/
+    bio: 这个人很懒，什么都没有留下
+    color: "#EDE8F2"
+    avatar: /friends/tianyuli.jpg
+
+academic:
+  headline: Yicheng Xiao / 肖翊成 · CS @ SUSTech · Visiting @ UC Berkeley
+  about: >
+    I'm interested in accelerating model training and inference.
+    I was a member of the supercomputing team at SUSTech
+    (IndySCC23, ASC24, IndySCC24, APAC24, IndySCC25).
+    I enjoy playing ultimate frisbee — BougaBoom at SUSTech and
+    Ursa Minor at Berkeley during my visiting.
+  news:
+    - date: "2025.12"
+      text: CompactFusion accepted by NeurIPS 2025
+    - date: "2025.09"
+      text: Visiting Student at UC Berkeley (BISP)
+    - date: "2025.07"
+      text: CompactFusion preprint released on arXiv
+    - date: "2024.05"
+      text: NUS SoC Workshop (Grade A)
+  education:
+    - period: "2022 — 2026"
+      school: Southern University of Science and Technology (SUSTech)
+      detail: B.S. in Computer Science · GPA 3.94/4.0 · Expected graduation 2026
+    - period: "2025.09 — 2025.12"
+      school: University of California, Berkeley (UCB)
+      detail: BISP Visiting Student
+    - period: "2024.05 — 2024.07"
+      school: National University of Singapore (NUS)
+      detail: SoC Workshop · Summer School · Grade A
+  experience:
+    - period: "2023 — Present"
+      title: SUSTech Supercomputing Team
+      detail: IndySCC23, ASC24, IndySCC24, APAC24, IndySCC25 — large-scale systems & HPC competition
+  publications:
+    - title: "CompactFusion: Accelerating Parallel Diffusion Model Serving with Residual Compression"
+      venue: "Jiajun Luo*, Yicheng Xiao*, et al. · NeurIPS 2025 · Residual compression for parallel diffusion serving, 3.0× speedup on 4×L20"
+      link: https://arxiv.org/abs/2507.17511
+      linkLabel: arXiv →
+    - title: "ML-SceGen: A Multi-level Scenario Generation Framework"
+      venue: "Yicheng Xiao*, Yangyang Sun*, Yicheng Lin* · LLM agents + ASP for controllable traffic scenario generation"
+      link: https://arxiv.org/abs/2501.10782
+      linkLabel: arXiv →
+  projects:
+    - name: CompactFusion
+      description: Residual compression framework for parallel diffusion model serving
+      href: https://github.com/Cobalt-27/CompactFusion
+      linkLabel: GitHub →
+      tags: [Diffusion, Systems, NeurIPS]
+    - name: COMPSCI 180 · Computational Photography
+      description: Camera optics, colorization, filters, mosaicing, NeRF, and diffusion models
+      href: /blog/compsci180_5
+      linkLabel: Blog →
+      tags: [CV, Berkeley]
+    - name: CS323 Incredibuild
+      description: Full SPL compiler — lexer, parser, AST, type checker, and LLVM IR
+      href: https://github.com/Jaredanwolfgang/CS323_Project_Incredibuild
+      linkLabel: GitHub →
+      tags: [Rust, Compiler, LLVM]
+    - name: CS334 VirtIO Crypto Device
+      description: VirtIO crypto device for Asterinas OS (symmetric / hash / AKCIPHER)
+      href: https://github.com/Jaredanwolfgang/CS334_Operating_System_VirtIO
+      linkLabel: GitHub →
+      tags: [Rust, OS, VirtIO]
+    - name: CS329 Active Learning for Object Detection
+      description: Active learning & data augmentation with RT-DETR-v2 on KITTI
+      href: https://github.com/Jaredanwolfgang/CS329_Machine_Learning_Project
+      linkLabel: GitHub →
+      tags: [PyTorch, CV]
+    - name: Project Hub
+      description: Course projects across systems, ML, networks, and software
+      href: /blog/projects_hub
+      linkLabel: Blog →
+      tags: [Projects]
