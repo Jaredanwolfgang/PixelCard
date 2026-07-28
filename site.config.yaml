@@ -13,8 +13,8 @@ profile:
   name: Yicheng Xiao
   handle: "@Jaredanjerry"
   bio: 不要温和地走进那个良夜
-  # 头像 / favicon 来自旧博客 source/images/
-  avatar: /avatar.jpg
+  # 头像：放在 public/ 下，这里填以 / 开头的路径
+  avatar: /avatar.png
   location: Shenzhen / Berkeley
   email: Jaredanjerry@gmail.com
 
