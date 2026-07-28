@@ -75,7 +75,7 @@ friends:
     url: https://blog.benx.dev/
     bio: Capture The Benben
     color: "#E7ECF1"
-    avatar: https://avatars.githubusercontent.com/u/34162471?v=4
+    avatar: /friends/chanbengz.jpeg
   - name: EricYong
     url: https://liuxy.space/
     bio: Look for the Light
@@ -96,6 +96,16 @@ friends:
     bio: 这个人很懒，什么都没有留下
     color: "#EDE8F2"
     avatar: /friends/tianyuli.jpg
+  - name: Weiyi Zhang
+    url: https://v1zhang.github.io/
+    bio: v2不丢人
+    color: "#E8D1E2"
+    avatar: /friends/v1zhang.jpg
+  - name: Shirley Sun
+    url: https://shirley430316.github.io/
+    bio: 晕碳睡一觉
+    color: "#F5E9EE"
+    avatar: /friends/shirley.jpg
 
 academic:
   headline: Yicheng Xiao / 肖翊成 · CS @ SUSTech · Visiting @ UC Berkeley
