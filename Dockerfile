@@ -2,13 +2,15 @@
 FROM node:20-bookworm-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+RUN npm config set registry https://registry.npmmirror.com \
+  && npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
 # ---------- build ----------
 FROM node:20-bookworm-slim AS builder
 WORKDIR /app
+ARG ENGAGEMENT_URL=http://server:4000
 ENV NEXT_TELEMETRY_DISABLED=1 \
-    ENGAGEMENT_URL=http://server:4000
+    ENGAGEMENT_URL=${ENGAGEMENT_URL}
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json next.config.mjs tsconfig.json next-env.d.ts ./
 COPY public ./public

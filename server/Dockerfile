@@ -1,9 +1,16 @@
 FROM node:20-bookworm-slim AS deps
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ \
+# 使用国内 Debian 镜像，减少服务器访问官方源的等待时间
+RUN sed -i \
+    -e 's|deb.debian.org/debian|mirrors.aliyun.com/debian|g' \
+    -e 's|deb.debian.org/debian-security|mirrors.aliyun.com/debian-security|g' \
+    -e 's|security.debian.org/debian-security|mirrors.aliyun.com/debian-security|g' \
+    /etc/apt/sources.list.d/debian.sources \
+  && apt-get update && apt-get install -y --no-install-recommends python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json* ./
-RUN npm install --no-audit --no-fund
+RUN npm config set registry https://registry.npmmirror.com \
+  && npm install --no-audit --no-fund
 
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
