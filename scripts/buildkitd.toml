@@ -1,0 +1,6 @@
+# Match the production host's existing Docker Hub mirrors.
+[registry."docker.io"]
+  mirrors = ["docker.m.daocloud.io", "docker.1ms.run", "mirror.ccs.tencentyun.com"]
+
+[worker.oci]
+  max-parallelism = 1

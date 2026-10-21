@@ -144,6 +144,7 @@ GitHub 推送与线上部署是不同步骤。用户已授权在博客内容验�
 - 主机规格：2 核、标称 4 GiB 内存（系统可见约 3.4 GiB），与多个业务共用；2026-10-20 检查时已有 4 GiB swap，根分区仅剩约 6.6 GiB。每次部署重新检查 `free -m`、`swapon --show`、`df -h` 和容器状态。上次无限制构建后出现 SSH/HTTPS 超时，但未找到明确的内核 OOM 记录，不能断言已确认 OOM。
 - 禁止直接在该主机执行无限制的 `docker compose build`。使用 `scripts/deploy-production.sh`：专用 BuildKit 构建器 `pixelcard-limited` 的 cgroup 硬上限为 1280 MiB 内存、1280 MiB 内存加 swap（不借用主机 swap）、1 CPU；Node heap 上限 768 MiB，Next.js 单 worker，构建缓存目标约 1 GiB。硬上限覆盖专用构建器及其子进程，不以 SSH 客户端的资源限制代替实际构建限制。内存不足时允许该构建失败，禁止自动调大上限挤占线上服务。
 - 构建前至少保留 1800 MiB 可用内存与 4 GiB 可用磁盘，否则停止并报告。不得为释放空间清理其他业务镜像、缓存或数据卷。异步只解决连接等待问题，不能替代资源限制。
+- 专用构建器使用 `scripts/buildkitd.toml`，复用主机已有 Docker Hub 镜像加速源，并设置构建步骤并行数为 1；它不会自动继承 Docker daemon 的镜像加速配置。不要为构建重启 Docker daemon。配置变更需要仅重建专用构建器（停止后 `docker buildx rm --keep-state pixelcard-limited`，再由脚本创建），不触碰其他服务。
 - 如运行容器的原镜像内容缺失，先建立并验证恢复镜像，不能直接切换。2026-10-20 已通过流式 export/import 保存 `pixelcard-rollback:recovered-running`；仅在核实它仍适用于当前发布、且通过隔离容器的首页和互动 API 检查后，才可用环境变量 `PIXELCARD_ROLLBACK_IMAGE` 将它显式传给部署脚本。正常部署默认使用当前运行镜像，不默认复用旧的恢复备份。
 
 部署流程：

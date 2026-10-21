@@ -60,6 +60,7 @@ echo
 
 if ! docker buildx inspect "$builder" >/dev/null 2>&1; then
   docker buildx create --name "$builder" --driver docker-container \
+    --buildkitd-config "$repo/scripts/buildkitd.toml" \
     --driver-opt memory=1280m,memory-swap=1280m,cpu-period=100000,cpu-quota=100000 \
     --buildkitd-flags '--oci-worker-gc-keepstorage 1024'
 fi
