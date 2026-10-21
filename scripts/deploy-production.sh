@@ -44,7 +44,10 @@ test "$(git branch --show-current)" = main
 test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
 revision=$(git rev-parse HEAD)
 printf '%s\n' "$revision" > "$state/target-commit"
-old_image=$(docker inspect pixelcard-web --format '{{.Image}}')
+old_image=${PIXELCARD_ROLLBACK_IMAGE:-$(docker inspect pixelcard-web --format '{{.Image}}')}
+# An explicitly supplied recovery image must have been tested before launch.
+docker image inspect "$old_image" >/dev/null
+old_image=$(docker image inspect "$old_image" --format '{{.Id}}')
 printf '%s\n' "$old_image" > "$state/previous-image"
 docker tag "$old_image" "pixelcard-rollback:${revision:0:12}"
 
