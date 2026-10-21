@@ -153,9 +153,22 @@ GitHub 推送与线上部署是不同步骤。用户已授权在博客内容验�
 - 互动数据库保存在命名卷 `pixelcard_engagement_data`，挂载到 `/app/data`。保留该卷和已有浏览、点赞、评论数据；禁止 `down -v` 或删除、覆盖数据库。
 - 主机规格：2 核、标称 4 GiB 内存（系统可见约 3.4 GiB），与多个业务共用；2026-10-20 检查时已有 4 GiB swap，根分区仅剩约 6.6 GiB。每次部署重新检查 `free -m`、`swapon --show`、`df -h` 和容器状态。上次无限制构建后出现 SSH/HTTPS 超时，但未找到明确的内核 OOM 记录，不能断言已确认 OOM。
 - 禁止直接在该主机执行无限制的 `docker compose build`。使用 `scripts/deploy-production.sh`：专用 BuildKit 构建器 `pixelcard-limited` 的 cgroup 硬上限为 1280 MiB 内存、1280 MiB 内存加 swap（不借用主机 swap）、1 CPU；Node heap 上限 768 MiB，Next.js 单 worker，构建缓存目标约 1 GiB。硬上限覆盖专用构建器及其子进程，不以 SSH 客户端的资源限制代替实际构建限制。内存不足时允许该构建失败，禁止自动调大上限挤占线上服务。
-- 构建前至少保留 1800 MiB 可用内存与 4 GiB 可用磁盘，否则停止并报告。不得为释放空间清理其他业务镜像、缓存或数据卷。异步只解决连接等待问题，不能替代资源限制。
+- 构建前至少保留 1800 MiB 可用内存与 4 GiB 可用磁盘。内存不足时停止并报告；磁盘不足时先按下述“博客构建缓存清理”流程处理，仍未达标则停止。不得为释放空间清理其他业务镜像、缓存或数据卷。异步只解决连接等待问题，不能替代资源限制。
 - 专用构建器使用 `scripts/buildkitd.toml`，复用主机已有 Docker Hub 镜像加速源，并设置构建步骤并行数为 1；它不会自动继承 Docker daemon 的镜像加速配置。不要为构建重启 Docker daemon。配置变更需要仅重建专用构建器（停止后 `docker buildx rm --keep-state pixelcard-limited`，再由脚本创建），不触碰其他服务。
 - 如运行容器的原镜像内容缺失，先建立并验证恢复镜像，不能直接切换。2026-10-20 已通过流式 export/import 保存 `pixelcard-rollback:recovered-running`；仅在核实它仍适用于当前发布、且通过隔离容器的首页和互动 API 检查后，才可用环境变量 `PIXELCARD_ROLLBACK_IMAGE` 将它显式传给部署脚本。正常部署默认使用当前运行镜像，不默认复用旧的恢复备份。
+
+### 博客构建缓存清理
+
+用户已授权：以后部署前磁盘空间不足时，自动按本流程清理能确认属于博客的构建缓存，无需重复确认。授权不包含其他业务缓存、运行镜像、回滚镜像、业务数据或数据卷；无法确认归属的记录一律保留。这是部署前检查的一部分，不代表已设置定时清理任务。
+
+1. **先排除并发任务并留存快照。** 查看部署状态及已有日志，在整个清理过程中持有与部署脚本相同的锁（`exec 9>/root/pixelcard-deploy/deploy.lock; flock -n 9`）；锁被占用时不清理。使用独立的 `/root/pixelcard-deploy/cache-clean-<run-id>/` 保存本次清理前后的资源、缓存清单和操作日志，不覆盖旧记录。记录所有运行中业务容器的名称、ID、`StartedAt`、`RestartCount`，以及博客当前 commit、镜像 ID 和 revision；确认当前镜像可被 `docker image inspect` 读取并保留以供回滚。
+2. **优先检查博客专用构建器。** 用 `docker buildx inspect pixelcard-limited` 和 `docker inspect buildx_buildkit_pixelcard-limited0` 核对其确为博客独占的 `docker-container` 构建器，状态卷为该构建器的 BuildKit 缓存卷，资源限制与部署脚本一致。`du` 无法读取已停止的构建器时，不把报错当成零缓存；先确认现有容器的硬限制，再用 `docker buildx inspect pixelcard-limited --bootstrap` 启动它并复核。禁止为读取缓存而重启 Docker daemon、启动其他构建器或放宽资源限制。
+3. **只清理专用构建器的可回收缓存。** 先保存 `docker buildx du --builder pixelcard-limited` 清单，确认无构建任务且归属无疑后，执行 `docker buildx prune --builder pixelcard-limited --all --force`，保存实际回收量。此命令仅适用于已确认博客独占的构建器；不删除构建器状态卷，不删除运行或回滚镜像。若构建器由本次清理启动，且仍无构建任务，检查完成后将它停止。
+4. **空间仍不足时，只读核对默认构建器。** 保存 `docker buildx du --builder default --verbose`，逐条检查 ID、父记录、创建时间、构建步骤描述、`Reclaimable` 和 `Shared`。必须结合博客 Dockerfile、特有的 `site.config.yaml`／`content` 复制步骤、依赖链与已知构建记录确认归属；不能只凭“最近创建”、`npm run build`、`/app` 或 Node 镜像判断。只允许选择已确认属于博客、`Reclaimable: true` 且 `Shared: false` 的记录；来源不明、仍在使用或共享的记录保留。
+5. **默认构建器仅按精确 ID 定向清理。** 执行前重新读取清单并核对候选记录，随后逐个执行 `docker buildx prune --builder default --force --filter "id=<本次已核实的完整缓存ID>"`，保存每条命令及回收量。父记录也需单独确认归属后才能选择，不使用递归父记录筛选扩大范围。历史日志中的缓存 ID 不可直接复用；命令版本不支持精确 ID 筛选时停止，不退化为整体清理，筛选语法可核对本机帮助和 [Docker 官方文档](https://docs.docker.com/reference/cli/docker/buildx/prune/)。本次验证过的路径是先清理专用缓存，再定向清理默认构建器中博客旧构建的私有记录；不是对默认构建器做整体清理。
+6. **禁止扩大清理范围。** 不使用 `docker system prune`、`docker image prune`、`docker container prune`、`docker volume prune`、无明确构建器和精确归属筛选的全局缓存清理；不执行 `down -v`，不手工删除 `/var/lib/docker` 内容。不得清理其他业务镜像、缓存或数据卷，也不得以“可回收”代替归属核实。博客互动数据库、当前运行镜像和回滚镜像必须保留。
+7. **重新检查门槛与服务状态。** 用 `df -Pk /var/lib/docker` 确认可用空间至少为 `4194304` KiB（4 GiB），用 `free -m`／`MemAvailable` 确认可用内存至少为 1800 MiB；swap 不计入可用内存门槛。对比业务容器快照，清理阶段不应改变任何业务容器的 ID、启动时间或重启次数，并检查博客 HTTPS 与互动健康接口。仍不达标或服务状态异常时停止部署，报告已清理范围、实际回收量和剩余阻塞，不扩展到其他业务或数据。
+8. **满足条件后接续部署。** 释放清理阶段持有的锁，再按下述部署流程核对、快进生产仓库并启动受限脚本；脚本仍需自行加锁并复查资源。只切换博客前端，部署后对比快照，确认其他业务容器及 `pixelcard-engagement` 未被重启，验证文章、资源和健康接口。报告清理量、发布 commit 与部署结果；磁盘余量如有报告，须区分清理后与重新构建后的值，不能把构建前余量当成当前余量。
 
 部署流程：
 
