@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LiFT：已测预算与质量</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f9fc;color:#20364a;font:14px/1.55 system-ui,-apple-system,"PingFang SC",sans-serif}main{max-width:1000px;margin:auto;padding:20px}h1{font-size:22px;line-height:1.35;margin:0 0 8px}.intro{margin:0 0 16px;color:#526779}.controls{padding:14px;background:white;border:1px solid #d4dee8;border-radius:12px}label{font-weight:650}output{float:right;font-variant-numeric:tabular-nums}input{width:100%;accent-color:#436f9a;margin:12px 0;min-height:24px}.presets{display:flex;gap:8px;flex-wrap:wrap}.presets button{background:#eef3f8;border:1px solid #ccd9e6;border-radius:8px;padding:7px 10px;color:inherit;cursor:pointer}.presets button:hover{background:#dce8f4}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.stat{padding:10px;background:white;border:1px solid #d4dee8;border-radius:10px}.stat small{display:block;color:#526779}.stat strong{font-size:18px;font-variant-numeric:tabular-nums}.grid{display:grid;grid-template-columns:58px repeat(6,minmax(0,1fr));gap:5px;align-items:stretch}.axis{display:flex;align-items:center;justify-content:center;color:#526779;font-size:12px;min-height:23px}.cell{min-width:0;min-height:57px;border:2px solid transparent;border-radius:8px;background:#e4efe8;color:#20364a;padding:5px 1px;cursor:pointer;font:inherit;font-weight:600;font-variant-numeric:tabular-nums}.cell small{display:block;font-size:10px;font-weight:400;color:#526779}.cell.over{background:#f2f2f3!important;color:#9ba2a9}.cell.best{border-color:#436f9a;box-shadow:inset 0 0 0 1px #436f9a}.cell.selected{outline:2px dashed #aa722b;outline-offset:1px}.cell:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #a8732a;outline-offset:2px}.legend{font-size:12px;margin:10px 0;color:#526779}.detail{margin:0;padding:10px 12px;border-left:3px solid #aa722b;background:#fff8ec;min-height:47px}.foot{font-size:12px;color:#526779;margin:10px 0 0}a{color:#315d89}noscript{display:block;padding:20px}@media(max-width:480px){main{padding:12px}h1{font-size:19px}.intro{font-size:12px;margin-bottom:10px}.controls{padding:10px}.grid{grid-template-columns:32px repeat(6,minmax(0,1fr));gap:3px}.cell{font-size:10px;min-height:49px;padding:5px 0}.cell small{font-size:9px}.stats{gap:5px}.stat{padding:8px 6px}.stat small{font-size:10px}.stat strong{font-size:15px}.axis{font-size:10px}.presets button{font-size:12px}.foot{font-size:11px}}
+</style>
+</head>
+<body><main>
+<h1>预算相同，循环和步数怎么选？</h1>
+<p class="intro">LiFT L/2-R10 的 24 个已测配置。同一 checkpoint，训练 2 轮；ImageNet 256×256、Euler、无 CFG。FID 越低越好。</p>
+<section class="controls" aria-label="预算设置">
+<label for="budget">推理预算上限</label><output id="budget-label" for="budget">8.070 TFLOPs / 图像</output>
+<input id="budget" type="range" min="0" max="1000" value="401" aria-describedby="scope">
+<div class="presets"><button data-budget="2.959">2.959</button><button data-budget="8.070">8.070</button><button data-budget="11.027">11.027</button><button data-budget="28.241">28.241</button><button data-budget="217.851">全部配置</button></div>
+</section>
+<section class="stats" aria-live="polite"><div class="stat"><small>预算内最低 FID</small><strong id="best-fid">13.165</strong></div><div class="stat"><small>对应步数 × 循环数</small><strong id="best-config">25 × 4</strong></div><div class="stat"><small>实际 TFLOPs / 图像</small><strong id="best-cost">7.397</strong></div></section>
+<div id="grid" class="grid" role="group" aria-label="行表示采样步数 T，列表示循环数 K；格子内为 FID 与成本"></div>
+<p class="legend">列：循环数 K；行：采样步数 T。格内小字为 TFLOPs / 图像。蓝框：预算内最佳实测 FID；灰色：超出预算；虚线：当前查看点。</p>
+<p id="detail" class="detail" aria-live="polite">点击任意配置查看精确数值。</p>
+<p class="foot" id="scope">只比较已测网格，不插值、不预测未测点；每点 50,000 张图，初始噪声与类别配对。成本不含 VAE 解码，不能直接换算为实际延迟。</p>
+<p class="foot">来源：<a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT v1，附录 A.3 表 6</a> · <a href="/media/diffusion-depth-step/images/lift-grid.json" target="_blank" rel="noopener">原始录入数据</a></p>
+<noscript>交互需要 JavaScript。正文图 3 和表格提供静态结果。</noscript>
+</main>
+<script>
+(()=>{
+'use strict';
+const rows=[[10,1,0.942,48.613],[10,2,1.614,33.633],[10,4,2.959,18.955],[10,8,5.648,15.289],[10,16,11.027,15.094],[10,32,21.785,16.435],[25,1,2.354,34.819],[25,2,4.035,22.57],[25,4,7.397,13.165],[25,8,14.12,11.39],[25,16,27.568,11.402],[25,32,54.463,12.142],[50,1,4.708,31.828],[50,2,8.07,20.304],[50,4,14.793,12.255],[50,8,28.241,10.952],[50,16,55.136,10.994],[50,32,108.926,11.567],[100,1,9.415,30.586],[100,2,16.139,19.422],[100,4,29.587,12.043],[100,8,56.482,10.961],[100,16,110.271,10.999],[100,32,217.851,11.484]];
+const ks=[1,2,4,8,16,32],ts=[10,25,50,100];
+const grid=document.getElementById('grid'),range=document.getElementById('budget');
+let selected=null,budget=8.070;
+const min=Math.log(0.942),span=Math.log(217.851)-min;
+const appendAxis=(label)=>{const el=document.createElement('div');el.className='axis';el.textContent=label;grid.append(el)};
+appendAxis('T / K');ks.forEach(appendAxis);
+const cells=[];
+for(const t of ts){appendAxis(t);for(const k of ks){const row=rows.find(r=>r[0]===t&&r[1]===k);const b=document.createElement('button');b.className='cell';b.type='button';b.setAttribute('aria-label',`${t} 步，${k} 轮，FID ${row[3].toFixed(3)}，成本 ${row[2].toFixed(3)} TFLOPs`);const main=document.createElement('span');main.textContent=row[3].toFixed(3);const cost=document.createElement('small');cost.textContent=row[2].toFixed(2);b.append(main,cost);const q=Math.max(0,Math.min(1,(row[3]-10.9)/37.8));b.style.background=`rgb(${212+32*q},${235-19*q},${226-36*q})`;b.addEventListener('click',()=>{selected=row;render()});grid.append(b);cells.push({b,row})}}
+function render(){const eligible=rows.filter(r=>r[2]<=budget+1e-9);const best=eligible.reduce((a,b)=>!a||b[3]<a[3]?b:a,null);document.getElementById('budget-label').textContent=`${budget.toFixed(3)} TFLOPs / 图像`;document.getElementById('best-fid').textContent=best?best[3].toFixed(3):'—';document.getElementById('best-config').textContent=best?`${best[0]} × ${best[1]}`:'无配置';document.getElementById('best-cost').textContent=best?best[2].toFixed(3):'—';for(const {b,row}of cells){b.classList.toggle('over',row[2]>budget+1e-9);b.classList.toggle('best',row===best);b.classList.toggle('selected',row===selected);b.setAttribute('aria-pressed',String(row===selected))}const r=selected||best;document.getElementById('detail').textContent=r?`查看：${r[0]} 步 × ${r[1]} 轮，FID ${r[3].toFixed(3)}，成本 ${r[2].toFixed(3)} TFLOPs / 图像。${r[2]>budget+1e-9?'此点超出当前预算。':r===best?'这是当前预算内的最佳实测点。':''}`:'当前预算内没有实测配置。'}
+function setBudget(v){budget=v;range.value=String(Math.round((Math.log(v)-min)/span*1000));render()}
+range.addEventListener('input',()=>{budget=Number(Math.exp(min+Number(range.value)/1000*span).toFixed(3));render()});
+for(const b of document.querySelectorAll('[data-budget]'))b.addEventListener('click',()=>setBudget(Number(b.dataset.budget)));
+setBudget(budget);
+})();
+</script></body></html>
