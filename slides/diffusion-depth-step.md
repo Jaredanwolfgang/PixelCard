@@ -1,7 +1,7 @@
 ---
 theme: default
 title: Diffusion 的计算，该花在深度还是步数上？
-info: Loop Diffusion Transformer 文献调研 · 组会初稿
+info: Loop Diffusion 文献调研 · 20 分钟汇报版
 author: Jaredan
 lang: zh-CN
 favicon: /favicon.webp
@@ -19,146 +19,186 @@ transition: none
 mdc: true
 ---
 
-<div class="eyebrow">LOOP DIFFUSION TRANSFORMER / 文献调研</div>
+<div class="eyebrow">LOOP DIFFUSION / 文献调研</div>
 
 # Diffusion 的计算，<br>该花在深度还是步数上？
 
-<p class="cover-lead">已经在反复去噪了，为什么还要让 Transformer 再循环？</p>
+<p class="cover-lead">为什么现在关注 Loop Transformer？</p>
 
-<div class="cover-axes"><div><span>Recurrent depth</span><b>↻</b><small>在当前位置，形成更好的预测</small></div><i>×</i><div><span>Denoising steps</span><b>→</b><small>沿生成轨迹，推进更多次</small></div></div>
+<div class="cover-axes"><div><b>↻</b><span>更深的内部计算</span></div><i>×</i><div><b>→</b><span>更多的去噪步数</span></div></div>
 
-<div class="cover-bottom"><span>Jaredan · 组会初稿 · 约 10 分钟</span><span>Looped-DiT / LiFT / Depth as Time</span></div>
-
-<div class="source">基于三篇论文的 v1 版本整理；图示由本文绘制，实验数字来自原文。 <span class="page-no">01 / 08</span></div>
+<div class="cover-bottom"><span>Jaredan · 14 页主体 · 约 20 分钟</span><span>近期进展 → 代表工作 → 计算分配</span></div>
 
 ---
 
-<div class="eyebrow">01 / 为什么关注 LOOP</div>
+<div class="eyebrow">01 / 为什么现在关注</div>
 
-# 共享参数，让推理深度成为一个可调的量
+# 近期视觉工作集中出现
 
-<p class="lead">参数量限制“存多少”，推理预算决定“算多久”。循环把这两个量部分分开。</p>
+<PaperTimeline />
+
+<div class="talk-footer"><span>本次核实样本 · 按 arXiv 首发去重，非全量统计</span><a href="15">口径与文献 ↗</a></div>
+
+---
+
+<div class="eyebrow">02 / 为什么研究 LOOP</div>
+
+# 不增加参数，也能增加计算深度
 
 <ComputeAxes />
 
-<div class="takeaway">研究的理由：同样一笔计算，可以用于改善当前预测，也可以用于增加采样更新；哪种更划算，需要实验回答。</div>
+<div class="takeaway">问题是：同样的预算，多算几层，还是多走几步？</div>
 
-<div class="source">Recurrent depth：一次预测内部重复共享块的次数；denoising steps：外层采样更新次数。记号 K、T 为本汇报统一记号。<br>依据 <a href="https://arxiv.org/html/2609.40305v1#S2" target="_blank" rel="noopener">Looped-DiT §2</a>、<a href="https://arxiv.org/html/2610.05538v1#S2" target="_blank" rel="noopener">LiFT §2–3</a>。块执行次数是结构示意，不等于精确 FLOPs 或延迟。 <span class="page-no">02 / 08</span></div>
-
----
-
-<div class="eyebrow">02 / LOOPED-DIT · 机制</div>
-
-# Looped-DiT 怎样让重复计算有用？
-
-<div class="architecture"><div>A · 前置 6 块</div><span>→</span><div class="shared">B · 共享 5 块<br><b>↻ 4 轮</b></div><span>→</span><div>C · 后置 6 块</div><span>→</span><div>预测 x₀</div></div>
-
-<p class="diagram-caption">17 组独立块参数，执行 32 次块计算。循环传递隐状态；一次调用内的噪声输入保持不变。</p>
-
-<div class="columns">
-<div class="panel">
-<h2>深监督：每轮都要能预测</h2>
-<p>每轮隐状态经过共享后置段 C，预测<strong>同一张干净图像</strong>，让中间状态也直接获得训练信号。</p>
-<div class="mini-equation">C(h₁), C(h₂), …, C(hₖ) → 同一 x₀</div>
-<p class="small">训练读出各轮；固定 K 推理时只读最终轮。它不保证误差逐轮下降。</p>
-</div>
-<div class="panel blue">
-<h2>自调节注意力：控制反复改写</h2>
-<p>重复注意力更新可能破坏已形成的局部信息。论文用门控，或 XSA 投影，调节注意力输出。</p>
-<p class="small">XSA（Exclusive Self Attention）去掉输出沿当前 token 自身 value 方向的分量；并非删除注意力矩阵的对角线。</p>
-</div>
-</div>
-
-<div class="source"><a href="https://arxiv.org/html/2609.40305v1#S2" target="_blank" rel="noopener">Looped Diffusion Transformer v1 · §2、§2.1–2.2、附录 §6.3</a>。上图为默认分块方式的自绘示意。<span class="page-no">03 / 08</span></div>
+<div class="talk-footer"><span>结构示意 · 块执行数不等于 FLOPs</span><a href="https://arxiv.org/html/2610.05538v1#S2" target="_blank" rel="noopener">LiFT §2–3 ↗</a></div>
 
 ---
 
-<div class="eyebrow">03 / LOOPED-DIT · 证据</div>
+<div class="eyebrow">03 / ELT · 先行工作</div>
 
-# 两项设计都有效，但“必要”要限定实验范围
+# 一个模型，也可以有多个可用深度
 
-<div class="columns evidence-columns">
-<div>
-<div class="chart-label">四项生成评测的平均分 ↑</div>
-<div class="bar-row"><span>朴素循环</span><div><i style="width: 28%"></i></div><b>56.2</b></div>
-<div class="bar-row"><span>＋深监督</span><div><i style="width: 54%"></i></div><b>57.5</b></div>
-<div class="bar-row"><span>＋XSA</span><div><i style="width: 74%"></i></div><b>58.5</b></div>
-<div class="bar-row accent"><span>＋深监督＋XSA</span><div><i style="width: 86%"></i></div><b>59.1</b></div>
-<p class="diagram-caption">Looped-DiT B/32，四轮；横轴从 54.8 起，非零基线。</p>
-<div class="axis-labels"><span>54.8</span><span>57.3</span><span>59.8</span></div>
-</div>
-<div class="panel blue">
-<h2>比较计算量，结论才站得住</h2>
-<p>在训练与推理计算匹配的对照中：</p>
-<div class="score-pair"><div><b>58.1</b><span>更深的非循环模型<br>＋深监督</span></div><div><b>59.1</b><span>Looped-DiT<br>＋深监督＋XSA</span></div></div>
-<p class="small">单次预测均为 267 GFLOPs；参数分别为 473M / 260M。此处不是整张图的采样成本。</p>
-</div>
-</div>
+<div class="elt-chain"><span>g</span><i>→</i><span>g</span><i>→</i><span>g</span><i>→</i><span>g</span></div>
+<div class="elt-exits"><div>中间出口<br><b>学生</b></div><span>← 循环内自蒸馏 ←</span><div>最深出口<br><b>在线教师</b></div></div>
 
-<div class="takeaway">这组结果支持“训练设计能让循环获益”；还不能推出所有 Diffusion 模型都必须采用这两项设计。</div>
+<div class="big-statement">浅出口同时学习真值和深出口。</div>
+<p class="single-note">ILSD：同一组共享权重，支持不同循环预算。</p>
 
-<div class="source"><a href="https://arxiv.org/html/2609.40305v1#S3.SS3" target="_blank" rel="noopener">Looped-DiT v1 · 表 4</a>：DPG、PRISM、CoRe、Spatial 平均分；<a href="https://arxiv.org/html/2609.40305v1#S3.SS2" target="_blank" rel="noopener">表 2</a>：训练 / 推理计算匹配对照。图按原始数字绘制；1 GFLOP = 10⁹ 次浮点运算。<span class="page-no">04 / 08</span></div>
+<div class="talk-footer"><span>选取中间轮与最深轮的训练示意</span><a href="https://arxiv.org/html/2604.09168v3#S4" target="_blank" rel="noopener">ELT §4 / 图 3 ↗</a></div>
 
 ---
 
-<div class="eyebrow">04 / LIFT · 训练目标</div>
+<div class="eyebrow">04 / LOOPED-DIT · 循环结构</div>
 
-# LiFT：不让每个深度都立刻追同一个目标
+# 循环的是隐状态，不是重新喂入一张图
 
-<p class="lead">把初始速度预测到训练目标之间的路径，变成各个深度的监督。</p>
+<div class="architecture"><div>A · 6 块</div><span>→</span><div class="shared">B · 5 块<br><b>↻ 4 轮</b></div><span>→</span><div>C · 6 块</div></div>
+
+<div class="structure-metrics"><div><b>17</b><span>独立块参数组</span></div><div><b>32</b><span>一次预测的块执行数</span></div></div>
+
+<div class="big-statement">图像和文本隐状态，共同进入下一轮。</div>
+<p class="single-note">先让重复计算有效，再谈推理时加深。</p>
+
+<div class="talk-footer"><span>固定噪声输入，在 B 内细化表示</span><a href="https://arxiv.org/html/2609.40305v1#S2" target="_blank" rel="noopener">Looped-DiT §2 ↗</a></div>
+
+---
+
+<div class="eyebrow">05 / LOOPED-DIT · 深监督</div>
+
+# 不让早期循环只依赖最终出口的梯度
+
+<LoopReadouts />
+
+
+<div class="talk-footer"><span>深监督不保证误差逐轮下降</span><a href="https://arxiv.org/html/2609.40305v1#S2.SS1" target="_blank" rel="noopener">Looped-DiT §2.1 ↗</a></div>
+
+---
+
+<div class="eyebrow">06 / LOOPED-DIT · 自调节注意力</div>
+
+# 已经形成的信息，不必在每轮都大幅改写
+
+<AttentionProjection />
+
+XSA：$z=o-(o^\top\hat v_i)\hat v_i$
+
+<div class="talk-footer"><span>二维投影示意 · 不是注意力对角线 mask</span><a href="https://arxiv.org/html/2609.40305v1#S2.SS2" target="_blank" rel="noopener">Looped-DiT §2.2 ↗</a></div>
+
+---
+
+<div class="eyebrow">07 / LOOPED-DIT · 对照实验</div>
+
+# 两项设计，在这组实验里都带来收益
+
+<div class="ablation-matrix"><span></span><span>无深监督</span><span>有深监督</span><span>普通注意力</span><b>56.2</b><b>57.5</b><span>XSA</span><b>58.5</b><b class="matrix-best">59.1</b></div>
+
+<div class="comparison-band"><span>匹配训练／推理计算</span><div>深层非循环 <b>58.1</b> <i>→</i> Looped-DiT <b>59.1</b></div></div>
+
+<div class="talk-footer"><span>B/32 · 四项评测均分 ↑ · 计算口径见参考页</span><a href="https://arxiv.org/html/2609.40305v1#S3.SS2" target="_blank" rel="noopener">Looped-DiT 表 2 / 4 ↗</a></div>
+
+---
+
+<div class="eyebrow">08 / LOOPREG · 最新进展</div>
+
+# 表征监督，也能塑造有用的循环
+
+<div class="representation-flow"><div>共享块 F<br><b>↻ K 次</b></div><span>→</span><div>终点 hₖ<br><b>投影 P</b></div><span>⇄</span><div>冻结 DINOv2<br><b>干净图像特征</b></div></div>
+
+<div class="result-pair"><div><span>训练 2 轮 · 推理 2 轮</span><b>14.71</b></div><i>→</i><div><span>同权重 · 推理 3 轮</span><b>5.34</b></div><em>FID ↓</em></div>
+<p class="single-note">监督施加在循环终点；推理不再使用视觉教师。</p>
+
+<div class="talk-footer"><span>B/2 · 同 checkpoint；Recall 0.631 → 0.508</span><a href="https://arxiv.org/html/2610.17877v1#S4" target="_blank" rel="noopener">LoopREG §3–4 / 表 1 ↗</a></div>
+
+---
+
+<div class="eyebrow">09 / LIFT · 训练目标</div>
+
+# 不同深度，给不同的中间目标
 
 $$
-\bar u_s=(1-s)\,\operatorname{sg}(u_0)+s\,u^\star,\qquad s\in[0,1]
+\bar u_s=(1-s)\,\operatorname{sg}(u_0)+s\,u^\star
 $$
 
-<div class="target-path"><div><b>u₀</b><span>初始预测</span></div><i></i><div><b>ūₛ</b><span>随深度改变的参考目标</span></div><i></i><div><b>u*</b><span>目标速度</span></div></div>
+<div class="target-path"><div><b>u₀</b><span>初始速度预测</span></div><i></i><div><b>ūₛ</b><span>当前深度的参考目标</span></div><i></i><div><b>u*</b><span>目标速度</span></div></div>
 
-<div class="columns">
-<div><h2>深度预算可以变</h2><p>训练随机采样中间坐标；推理按所选 K 均匀划分，最后都到 s = 1。</p></div>
-<div><h2>含义要分清</h2><p>s 是<strong>计算深度坐标</strong>，不是外部去噪时间；直线路径定义在预测空间。</p></div>
-</div>
+<div class="big-statement">不同 K，最终都到 s = 1。</div>
+<p class="single-note">s 是计算深度坐标，不是外部去噪时间。</p>
 
-<div class="source"><a href="https://arxiv.org/html/2610.05538v1#S3.SS1" target="_blank" rel="noopener">LiFT: Loop Flow Transformers Loop in Depth, Flow in Time v1 · §3.1</a>。sg 为 stop-gradient；u₀ 为 prelude 的预测，另有辅助损失。<br>本文自绘参考路径，不表示隐状态沿直线运动。<span class="page-no">05 / 08</span></div>
+<div class="talk-footer"><span>预测空间中的参考路径示意</span><a href="https://arxiv.org/html/2610.05538v1#S3.SS1" target="_blank" rel="noopener">LiFT §3.1 ↗</a></div>
 
 ---
 
-<div class="eyebrow">05 / LIFT · 计算预算</div>
+<div class="eyebrow">10 / LIFT · 计算分配</div>
 
-# 更多 loop 和更多 step，收益并不等价
+# 多 Loop 与多 Step，收益不等价
 
 <LiftGrid />
 
-<div class="takeaway compact">25 步 × 4 轮：7.397 TFLOPs / FID 13.165；50 步 × 2 轮：8.070 / 20.304。前者在这组设置下更省、也更好。</div>
+<div class="takeaway compact">这组实验中，25 步 × 4 轮，比 50 步 × 2 轮更省、也更好。</div>
 
-<div class="source"><a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT v1 · §4.4、附录 A.3 表 6</a>。ImageNet-1k 256²，L/2-R10（270.24M），训练 2 轮、500k updates，无 CFG，Euler；同 checkpoint。<br><a href="https://arxiv.org/abs/1706.08500" target="_blank" rel="noopener">FID</a>：生成特征分布距离，此处评估 50k 图，越低越好；1 TFLOP = 10¹² 次浮点运算，不含 VAE 解码。24 点未插值，未含额外 K=3、5 两点。<br>★ 仅为该实测网格内预算最优，不代表全局最优或在线决策规则。<span class="page-no">06 / 08</span></div>
+<div class="talk-footer"><span>同 checkpoint · ImageNet 256² · 无 CFG · FID ↓</span><a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT 表 6 ↗</a></div>
 
 ---
 
-<div class="eyebrow">06 / DEPTH AS TIME · 内部时间</div>
+<div class="eyebrow">11 / LIFT · 收益的边界</div>
 
-# 一次前向里，也能组织一条内部计算轨迹
+# 不能只把预算堆到循环深度上
 
-<p class="lead">先观察单步生成模型的中间层，再用带“内部时间”的共享块蒸馏教师轨迹。</p>
+<div class="budget-comparison"><div class="budget-header"><span>步数 × 轮数</span><span>TFLOPs / 图 ↓</span><span>FID ↓</span></div><div class="budget-row budget-best"><b>25 × 4</b><span>7.397</span><strong>13.165</strong></div><div class="budget-row"><b>10 × 16</b><span>11.027</span><strong>15.094</strong></div><div class="budget-row"><b>10 × 32</b><span>21.785</span><strong>16.435</strong></div></div>
+
+<div class="big-statement compact-statement">更多循环，不等于更好的质量。</div>
+<p class="single-note">这三个实测配置里，25 × 4 同时更省、更好。</p>
+
+<div class="talk-footer"><span>同一 checkpoint 与评估协议；非等成本三点</span><a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT 表 6 ↗</a></div>
+
+---
+
+<div class="eyebrow">12 / DEPTH AS TIME</div>
+
+# 用内部时间，组织共享块的计算
 
 <InternalClock />
 
-<div class="columns tight">
-<div><h2>训练对齐什么？</h2><p>学生隐状态匹配对应教师层，并匹配最终输出。内部区间 (τₐ, τᵦ) 通过 AdaLN 条件化共享块。</p></div>
-<div><h2>改变 K 意味着什么？</h2><p>重新划分整段内部时间，终点仍相同。K 小，不等于少走了一段外部去噪时间。</p></div>
-</div>
+<div class="big-statement compact-statement">重新划分内部时间，仍然走到同一终点。</div>
+<p class="single-note">内部时钟 τ ≠ 外部去噪时间。</p>
 
-<div class="source"><a href="https://arxiv.org/html/2610.03626v1#S5" target="_blank" rel="noopener">Depth as Time in One-Step Generative Models v1 · §5、附录 C.1</a>。图示为 L/2 单共享块、24 层教师的对齐方式；外部任务固定 (t,r)=(1,0)。<br>τ 是归一化内部时钟，不是经校准的噪声水平。模型压缩不等于计算按参数压缩比例下降。<span class="page-no">07 / 08</span></div>
+<div class="talk-footer"><span>24 层教师的轨迹蒸馏示意</span><a href="https://arxiv.org/html/2610.03626v1#S5" target="_blank" rel="noopener">Depth as Time §5 ↗</a></div>
 
 ---
 
-<div class="eyebrow">07 / 这次调研说明了什么</div>
+<div class="eyebrow">13 / 回到研究问题</div>
 
-# Loop 值得研究，因为它改变了计算的使用方式
+# 先看监督什么，再看计算花在哪里
 
-<table class="summary-table"><thead><tr><th>代表工作</th><th>最重要的贡献</th><th>读结果时保留的边界</th></tr></thead><tbody><tr><td><a href="https://arxiv.org/html/2609.40305v1" target="_blank" rel="noopener">Looped-DiT</a></td><td>深监督与注意力调节，让重复计算有效</td><td>同一目标的迭代细化；收益依赖训练设计</td></tr><tr><td><a href="https://arxiv.org/html/2610.05538v1" target="_blank" rel="noopener">LiFT</a></td><td>深度相关监督，并联合扫描 K 与 T</td><td>已有预算网格，尚不能给出通用分配结论</td></tr><tr><td><a href="https://arxiv.org/html/2610.03626v1" target="_blank" rel="noopener">Depth as Time</a></td><td>把层间计算显式组织成内部时间轨迹</td><td>内部时间与外部生成时间仍需区分</td></tr></tbody></table>
+<div class="method-comparison"><div><b>ELT</b><span>浅出口向最深出口蒸馏</span></div><div><b>Looped-DiT</b><span>各出口追同一干净图像，调节注意力更新</span></div><div><b>LoopREG</b><span>循环终点对齐视觉表征</span></div><div><b>LiFT</b><span>各深度追预测空间中的不同参考目标</span></div><div><b>Depth as Time</b><span>匹配教师的层间轨迹与最终输出</span></div></div>
 
-<div class="closing">先让额外计算有用，再在相同预算下比较它该花在哪里。</div>
+<div class="closing">最后，在相同预算下比较深度与步数。</div>
 
-<div class="closing-links"><a href="/blog/diffusion-depth-step" target="_blank">完整文献笔记 ↗</a><a href="/slide">返回汇报目录 ↗</a><span>方向键翻页 · O 总览 · 工具栏全屏</span></div>
+<div class="talk-footer"><a href="15">讲述节奏、口径与参考资料 ↗</a><a href="/blog/diffusion-depth-step" target="_blank">完整文献笔记 ↗</a></div>
 
-<div class="source">阅读范围：三篇论文 v1，均为作者报告的结果；本汇报未进行复现实验，不跨数据集、指标或引导设置排列性能名次。<span class="page-no">08 / 08</span></div>
+---
+
+<div class="eyebrow">参考 / 按需查看，不计入主体 14 页</div>
+
+# 来源、实验设置与统计口径
+
+<ReferencePanel />

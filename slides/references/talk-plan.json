@@ -1,0 +1,13 @@
+{
+  "mainSlides": 14,
+  "referenceSlide": 15,
+  "targetMinutes": 20,
+  "sections": [
+    {"pages":"1–4","title":"研究动机、时间线与 ELT","minutes":5,"cue":"用已核实数量交代近期进展；在 K/T 图中分清内部循环与外层采样；说明 ELT 的循环内自蒸馏。"},
+    {"pages":"5–8","title":"Looped-DiT：机制与实验","minutes":6,"cue":"讲清权重如何共享；切换训练与推理读出；用投影图解释 XSA，再读消融与计算匹配对照。"},
+    {"pages":"9","title":"LoopREG：另一种监督方式","minutes":1.5,"cue":"强调表征监督与循环位置共置；FID 的收益伴随 Recall 下降，不能只报最佳数字。"},
+    {"pages":"10–12","title":"LiFT：目标与预算分配","minutes":4.5,"cue":"解释深度相关目标；现场切换两个计算预算；再用过度循环的实测配置说明收益会饱和。"},
+    {"pages":"13","title":"Depth as Time：内部时间","minutes":2,"cue":"把 K 从 4 改到 8：整段内部时间被重新划分，外部生成终点始终相同。"},
+    {"pages":"14","title":"比较与结论","minutes":1,"cue":"比较各篇监督的对象；回到同预算下比较计算分配这一文献问题。"}
+  ]
+}

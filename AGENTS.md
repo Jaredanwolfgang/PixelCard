@@ -134,6 +134,7 @@ draft: false
 
 ## 汇报 Slides
 
+- 汇报优先用大字结论和图示，减少段落与多行小字脚注；详细来源、术语和实验条件放在可查阅的参考页，主体仍保留影响结论的关键条件。以论文数量说明近期活跃度时，提供可核对的清单、时间范围和去重规则，区分预印本首发、修订与会议发表，以及直接相关和相邻工作，不把样本数量写成全领域总量。
 - 使用现成的 Slidev，不自行编写翻页引擎。`/slide` 为汇报总目录，`/slide/<slug>` 为各份汇报；目录条目维护在 `src/lib/slides.ts`，博客侧栏有入口。
 - Markdown 与 Vue 源文档位于 `slides/`，编译工具独立安装：`npm --prefix slides ci`，需要 Node.js 22.12+。`npm --prefix slides run dev` 预览；`npm --prefix slides run build` 生成当前汇报，具体入口、`--base /slide/<slug>/` 和输出目录以 `slides/package.json` 为准。新增汇报需同步添加构建命令及目录条目。
 - 编译产物 `public/slides/<slug>/` 是有意跟踪的部署资源，和源文档一起提交。每次修改源文档或组件必须重新编译；Vite 仅清空对应的明确输出目录，不能清理其他汇报。生产构建不安装或执行 Slidev，`.dockerignore` 排除整个 `slides/` 编译工程；只随博客镜像发布静态产物。
