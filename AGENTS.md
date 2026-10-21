@@ -141,14 +141,17 @@ GitHub 推送与线上部署是不同步骤。用户已授权在博客内容验�
 - 前端构建参数与运行时变量：`ENGAGEMENT_URL=http://pixelcard-engagement:4000`。Next.js rewrite 在构建时生成，必须保留 Dockerfile 对该构建参数的支持。
 - 网络：`rmmt-net`；已有 Nginx 容器 `rmmt-proxy` 为博客提供 HTTPS 反向代理。不另开公网端口，不覆盖现有代理或证书配置。
 - 互动数据库保存在命名卷 `pixelcard_engagement_data`，挂载到 `/app/data`。保留该卷和已有浏览、点赞、评论数据；禁止 `down -v` 或删除、覆盖数据库。
+- 主机规格：2 核、标称 4 GiB 内存（系统可见约 3.4 GiB），与多个业务共用；2026-10-20 检查时已有 4 GiB swap，根分区仅剩约 6.6 GiB。每次部署重新检查 `free -m`、`swapon --show`、`df -h` 和容器状态。上次无限制构建后出现 SSH/HTTPS 超时，但未找到明确的内核 OOM 记录，不能断言已确认 OOM。
+- 禁止直接在该主机执行无限制的 `docker compose build`。使用 `scripts/deploy-production.sh`：专用 BuildKit 构建器 `pixelcard-limited` 的 cgroup 硬上限为 1280 MiB 内存、1280 MiB 内存加 swap（不借用主机 swap）、1 CPU；Node heap 上限 768 MiB，Next.js 单 worker，构建缓存目标约 1 GiB。硬上限覆盖专用构建器及其子进程，不以 SSH 客户端的资源限制代替实际构建限制。内存不足时允许该构建失败，禁止自动调大上限挤占线上服务。
+- 构建前至少保留 1800 MiB 可用内存与 4 GiB 可用磁盘，否则停止并报告。不得为释放空间清理其他业务镜像、缓存或数据卷。异步只解决连接等待问题，不能替代资源限制。
 
 部署流程：
 
 1. 完成文章与资源的验证并推送 GitHub。默认只部署已提交、已推送的生产 `main`，不发布本地无关改动或未完成文章；其他分支须按用户明确要求处理。
 2. SSH 检查 `/root/v1/PixelCard` 的工作区、分支、remote、当前 commit，以及博客容器状态。若存在服务器修改或额外提交，先查看并保留，不执行 `reset --hard`、强制覆盖或丢弃变更。必要时将已有修复安全整合到 GitHub，再继续。
 3. 在服务器仓库执行 `git fetch origin` 和 `git merge --ff-only origin/main`，确认服务器 HEAD 等于预期发布 commit。非快进时先检查差异，不盲目合并或部署不同版本。
-4. 在 `/root/v1` 执行 `docker compose build pixelcard-web`。只有互动后端代码或依赖发生变化时，才额外构建 `pixelcard-engagement`。构建成功前保留旧容器运行。
-5. 构建成功后，在 `/root/v1` 执行 `docker compose up -d --no-deps pixelcard-web`；如本次确需更新后端，先以同样方式更新 `pixelcard-engagement`。不要重启其他业务或代理。
+4. 使用后台任务运行受限部署脚本，SSH 只负责提交任务和读取短快照，不持续等待构建输出。示例（在服务器上执行）：`mkdir -p /root/pixelcard-deploy; nohup timeout --signal=TERM --kill-after=30s 25m bash /root/v1/PixelCard/scripts/deploy-production.sh > /root/pixelcard-deploy/deploy.log 2>&1 < /dev/null &`。先确认没有已有部署任务；脚本用 `flock` 防止重复部署。日志、状态、目标 commit 和旧镜像 ID 保存在 `/root/pixelcard-deploy/`。若日志与任务状态已有记录，先读取，再用独立日志名启动下一次任务，避免覆盖诊断证据。
+5. 脚本构建成功后才更新 `pixelcard-web`（`up -d --no-deps --no-build`），进行 HTTP 检查并验证镜像 revision，失败自动恢复旧镜像。只有互动后端代码或依赖发生变化时才安排后端更新，并单独设置构建资源限制；该脚本不更新后端。不要重启其他业务或代理。
 6. 检查 `docker compose ps pixelcard-web pixelcard-engagement`、相关日志、HTTPS 首页、本次变更的文章路径及资源链接，并验证互动 API 没有代理错误。可以使用服务器上的 `curl --fail` 检查公网入口。确认新内容实际出现在响应中，不能仅凭容器启动判断成功。
 7. 部署前记录旧 commit 和镜像 ID；失败时保留日志，并优先使用旧镜像恢复博客服务，不触碰数据卷和其他业务。收尾报告发布 commit、验证过的页面链接、部署结果及任何未完成事项。
 

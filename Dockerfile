@@ -9,8 +9,14 @@ RUN npm config set registry https://registry.npmmirror.com \
 FROM node:20-bookworm-slim AS builder
 WORKDIR /app
 ARG ENGAGEMENT_URL=http://server:4000
+ARG PIXELCARD_LIMITED_BUILD=0
+ARG BUILD_NODE_OPTIONS=--max-old-space-size=768
 ENV NEXT_TELEMETRY_DISABLED=1 \
-    ENGAGEMENT_URL=${ENGAGEMENT_URL}
+    ENGAGEMENT_URL=${ENGAGEMENT_URL} \
+    PIXELCARD_LIMITED_BUILD=${PIXELCARD_LIMITED_BUILD} \
+    NODE_OPTIONS=${BUILD_NODE_OPTIONS} \
+    RAYON_NUM_THREADS=1 \
+    UV_THREADPOOL_SIZE=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json next.config.mjs tsconfig.json next-env.d.ts ./
 COPY public ./public
