@@ -7,6 +7,7 @@
   "setting": "ImageNet-1k 256x256, 50000 generated images, EMA, Euler, CFG=1; same checkpoint, paired noise and class labels",
   "cost_unit": "TFLOPs per image, excludes VAE decoding",
   "interpolation": false,
+  "scope": "24-point Cartesian grid; excludes the two additional Table 6 points at T=50, K=3 and K=5",
   "rows": [
     [10,1,0.942,48.613],[10,2,1.614,33.633],[10,4,2.959,18.955],[10,8,5.648,15.289],[10,16,11.027,15.094],[10,32,21.785,16.435],
     [25,1,2.354,34.819],[25,2,4.035,22.570],[25,4,7.397,13.165],[25,8,14.120,11.390],[25,16,27.568,11.402],[25,32,54.463,12.142],

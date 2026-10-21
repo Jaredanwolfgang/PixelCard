@@ -77,9 +77,9 @@ arrow(d,925,365,1030,365,GREEN)
 box(d,(1035,280,1370,455),['按位置保留残差','ΔW(r) ≈ B(r) A(r)','截断 SVD 初始化'],fill='#fff1df',size=28)
 text(d,(65,587),'第 r 轮使用：W̄ + B(r) A(r)',38,INK)
 text(d,(65,658),'共享部分相同；各位置的低秩增量不同；继续训练时两者都更新。',30)
-text(d,(65,724),'位置独立 adapter 不会自动定义训练深度之外的下一套权重。',28,GOLD)
+text(d,(65,724),'低秩增量的秩控制额外参数量与原始权重的近似精度。',28,GOLD)
 text(d,(65,801),'自绘示意，依据 Relaxed Recursive Transformers §2.2–2.3。',23,MUTED)
-save(im,'rrt-initialization.png')
+save(im,'rrt-mechanism.png')
 
 meta=json.loads((ROOT/'lift-grid.json').read_text()); rows=meta['rows']
 im,d=canvas(900,'LiFT：循环深度 × 采样步数的实测 FID','同一 L/2-R10 checkpoint · ImageNet 256 × 256 · 50,000 samples · 越低越好')

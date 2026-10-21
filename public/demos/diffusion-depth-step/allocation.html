@@ -9,7 +9,7 @@
 </head>
 <body><main>
 <h1>预算相同，循环和步数怎么选？</h1>
-<p class="intro">LiFT L/2-R10 的 24 个已测配置。同一 checkpoint，训练 2 轮；ImageNet 256×256、Euler、无 CFG。FID 越低越好。</p>
+<p class="intro">LiFT L/2-R10 的 24 点规则网格。同一 checkpoint，训练 2 轮；ImageNet 256×256、Euler、无 CFG。FID 越低越好。</p>
 <section class="controls" aria-label="预算设置">
 <label for="budget">推理预算上限</label><output id="budget-label" for="budget">8.070 TFLOPs / 图像</output>
 <input id="budget" type="range" min="0" max="1000" value="401" aria-describedby="scope">
@@ -19,7 +19,7 @@
 <div id="grid" class="grid" role="group" aria-label="行表示采样步数 T，列表示循环数 K；格子内为 FID 与成本"></div>
 <p class="legend">列：循环数 K；行：采样步数 T。格内小字为 TFLOPs / 图像。蓝框：预算内最佳实测 FID；灰色：超出预算；虚线：当前查看点。</p>
 <p id="detail" class="detail" aria-live="polite">点击任意配置查看精确数值。</p>
-<p class="foot" id="scope">只比较已测网格，不插值、不预测未测点；每点 50,000 张图，初始噪声与类别配对。成本不含 VAE 解码，不能直接换算为实际延迟。</p>
+<p class="foot" id="scope">只比较所展示的 24 点，不包含表 6 中 50 步下 3、5 轮的额外点，不插值、不预测未测点；每点 50,000 张图，初始噪声与类别配对。成本不含 VAE 解码，不能直接换算为实际延迟。</p>
 <p class="foot">来源：<a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT v1，附录 A.3 表 6</a> · <a href="/media/diffusion-depth-step/images/lift-grid.json" target="_blank" rel="noopener">原始录入数据</a></p>
 <noscript>交互需要 JavaScript。正文图 3 和表格提供静态结果。</noscript>
 </main>
