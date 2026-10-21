@@ -2,6 +2,7 @@
 title: "Diffusion 的计算该花在哪：从循环深度到去噪步数"
 excerpt: "多算几层和多走几步有什么区别？沿着 Looped-DiT、LiFT 和预训练模型转换工作，区分论文里的机制证据、计算收益与适用边界。"
 tag: academic
+cover: ./images/cover.webp
 publishedAt: "2026-10-21"
 draft: false
 ---
