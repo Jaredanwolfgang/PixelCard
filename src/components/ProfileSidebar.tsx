@@ -56,6 +56,9 @@ export default function ProfileSidebar({
         <Link href="/archive">
           全部博客 <span className="arr">→</span>
         </Link>
+        <Link href="/slide">
+          汇报 Slides <span className="arr">→</span>
+        </Link>
       </nav>
 
       <div className="social-row">

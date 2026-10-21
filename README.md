@@ -59,6 +59,21 @@ $$
 
 图片会通过 `/media/<slug>/...` 提供；`draft: true` 仅在开发环境展示。
 
+## 汇报 Slides
+
+`/slide` 为所有汇报的目录，`/slide/diffusion-depth-step` 为第一份组会调研。
+使用 [Slidev](https://sli.dev/)，Markdown 源文档和 Vue 交互组件位于 `slides/`，编译器独立于博客依赖。需要 Node.js 22.12+。
+
+```bash
+npm --prefix slides ci
+npm --prefix slides run dev
+npm --prefix slides run build
+```
+
+编译结果在 `public/slides/diffusion-depth-step/`，与源文件一同提交；生产服务器只构建 Next.js，不再编译 Slidev。修改后先重新编译，再运行根目录 `npm run build`。新增汇报时为其设置独立的 `--base /slide/<slug>/` 和输出目录，并更新 `src/lib/slides.ts` 的目录条目。
+
+展示时方向键翻页，`O` 总览；工具栏可全屏或进入演讲者视图。公开构建使用 `--without-notes`，不打包演讲备注。交互图中的预算统计使用论文原始网格，不作插值。
+
 ## Docker 部署
 
 ```bash

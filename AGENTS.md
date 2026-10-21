@@ -16,11 +16,15 @@ content/
   posts/<slug>/images/            每篇文章的图片、图表和视频
   assets/                        全局资源，如头像
 public/                          直接通过站点根路径访问的静态资源
+  slides/<slug>/                Slidev 编译后的公开站点，与源文档一起提交
+slides/                         独立的 Slidev Markdown 源文档、Vue 组件与编译依赖
 src/
   app/page.tsx                   首页
   app/blog/[slug]/page.tsx        博客详情页
   app/archive/page.tsx            归档页
   app/academic/page.tsx           学术主页
+  app/slide/page.tsx              汇报总目录
+  app/slide/[slug]/[[...path]]/route.ts Slidev HTML、资源及深链接接口
   app/media/[...path]/route.ts    content/posts 中的媒体文件接口
   app/layout.tsx                 页面布局
   app/globals.css                全局样式
@@ -32,6 +36,7 @@ src/
   lib/config.ts                 YAML 配置读取
   lib/types.ts                  内容与站点类型
   lib/engagement.ts             互动服务调用
+  lib/slides.ts                 汇报目录元数据
 server/                         Hono + SQLite 互动后端（浏览、点赞、评论）
 data/                           本地互动数据库，已被 Git 忽略
 scripts/migrate_from_hexo.py     旧 Hexo 内容迁移脚本
@@ -126,6 +131,14 @@ draft: false
 - 当前 `/media` 接口未配置 HTML、JS 和 CSS 的 MIME 类型，它们会返回 `application/octet-stream`；不要把 `content/posts` 内的 HTML 直接作为可运行 iframe。需要改变这一行为时再修改接口并验证。
 - 图示应解释变量、单位、假设和适用边界。交互图提供默认可读状态，必要时附静态图，便于手机阅读、打印和回顾。检查浏览器显示、交互、公式、资源请求、控制台和窄屏布局。
 - 当前没有内置 Mermaid 渲染；需转为图片或提供经过验证的渲染实现，不能只留下无法显示的代码块。
+
+## 汇报 Slides
+
+- 使用现成的 Slidev，不自行编写翻页引擎。`/slide` 为汇报总目录，`/slide/<slug>` 为各份汇报；目录条目维护在 `src/lib/slides.ts`，博客侧栏有入口。
+- Markdown 与 Vue 源文档位于 `slides/`，编译工具独立安装：`npm --prefix slides ci`，需要 Node.js 22.12+。`npm --prefix slides run dev` 预览；`npm --prefix slides run build` 生成当前汇报，具体入口、`--base /slide/<slug>/` 和输出目录以 `slides/package.json` 为准。新增汇报需同步添加构建命令及目录条目。
+- 编译产物 `public/slides/<slug>/` 是有意跟踪的部署资源，和源文档一起提交。每次修改源文档或组件必须重新编译；Vite 仅清空对应的明确输出目录，不能清理其他汇报。生产构建不安装或执行 Slidev，`.dockerignore` 排除整个 `slides/` 编译工程；只随博客镜像发布静态产物。
+- 公开构建使用 `--without-notes`。发布前检查 Markdown、组件、数据与生成脚本的公开范围，沿用文章的来源标注和 Humanizer 要求；本次 diffusion-depth-step 仅公开既有文献机制和贡献，不加入未公开组合方案或实验 idea。
+- 验证总目录、单页深链接刷新、键盘翻页、工具栏全屏、总览、演讲者视图和交互默认值；检查桌面及窄屏布局、资源 MIME、404 与控制台。交互必须有可读默认状态；论文数据与机制示意分开标注，不把网格最佳值声称为全局最优。
 
 ## 验证与 GitHub 推送
 

@@ -7,3 +7,4 @@ data
 .env.local
 server/node_modules
 server/data
+slides
