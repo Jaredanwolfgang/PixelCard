@@ -137,19 +137,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">10 / LIFT · 主要贡献</div>
-
-# 让循环成为可用的推理计算维度
-
-<LiftContributions />
-
-<p class="single-note">本文的深度由预算指定；尚未实现按样本状态动态分配。</p>
-
-<div class="talk-footer"><span>ImageNet 256² · 无 CFG；收益依赖模型规模与计算配置</span><a href="https://arxiv.org/html/2610.05538v1#S6" target="_blank" rel="noopener">LiFT §3–4 / §6 ↗</a></div>
-
----
-
-<div class="eyebrow">11 / LIFT · 训练目标</div>
+<div class="eyebrow">10 / LIFT · 训练目标</div>
 
 # u* 是样本对的速度，深度 s 控制修正进度
 
@@ -159,7 +147,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">12 / LIFT · 主要结果</div>
+<div class="eyebrow">11 / LIFT · 主要结果</div>
 
 # 深度外推有效，较大模型取得更好的质量与成本
 
@@ -169,7 +157,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">13 / LIFT · 计算分配</div>
+<div class="eyebrow">12 / LIFT · 计算分配</div>
 
 # 多 Loop 与多 Step，收益不等价
 
@@ -181,7 +169,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">14 / LIFT · 收益的边界</div>
+<div class="eyebrow">13 / LIFT · 收益的边界</div>
 
 # 不能只把预算堆到循环深度上
 
@@ -191,6 +179,18 @@ mdc: true
 <p class="single-note">这三个实测配置里，25 × 4 同时更省、更好。</p>
 
 <div class="talk-footer"><span>同一 checkpoint；非等成本三点；训练深度处也未优于同尺度 Dense</span><a href="https://arxiv.org/html/2610.05538v1#A1.SS3" target="_blank" rel="noopener">LiFT 表 6 ↗</a></div>
+
+---
+
+<div class="eyebrow">14 / LIFT · 主要贡献</div>
+
+# 让循环成为可用的推理计算维度
+
+<LiftContributions />
+
+<p class="single-note">本文的深度由预算指定；尚未实现按样本状态动态分配。</p>
+
+<div class="talk-footer"><span>ImageNet 256² · 无 CFG；收益依赖模型规模与计算配置</span><a href="https://arxiv.org/html/2610.05538v1#S6" target="_blank" rel="noopener">LiFT §3–4 / §6 ↗</a></div>
 
 ---
 
