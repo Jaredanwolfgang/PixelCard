@@ -45,11 +45,10 @@ const end = computed(() => ({ x: 62 + 62 * target.value[0], y: 244 - 62 * target
       </svg>
     </div>
     <div class="example-controls"><label>计算深度 s <input aria-label="LiFT 计算深度坐标 s" v-model.number="s" type="range" min="0" max="1" step="0.25" /> <b>{{ number(value) }}</b></label><span>ūₛ = (1 − s) · sg(u₀) + s · u*</span></div>
-    <div class="example-result">u* = x₁ − x₀ = (4, 2)；当前参考 ūₛ = ({{ number(target[0]) }}, {{ number(target[1]) }})。</div>
-    <div class="example-note">u₀ = D(P(xₜ, t))：Prelude 后经共享头读出；(1, 3) 是假设值。</div>
+    <div class="example-note">u* = x₁ − x₀；u₀ = D(P(xₜ, t)) 为 Prelude 读出；(1, 3) 为示例。</div>
   </div>
 </template>
 
 <style scoped>
-.lift-velocity{margin-top:-20px}.example-head{display:grid;grid-template-columns:1fr 1fr;gap:22px;color:#466d7b;font-size:21px;font-weight:600}.plots{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:0}.plots svg{display:block;width:100%;height:265px;overflow:visible}.muted{fill:#71878c;font-size:17px}.coordinate{fill:#4b626b;font-size:21px}.target{fill:#b06442;font-size:21px;font-weight:600}.input{fill:#376e80;font-size:21px;font-weight:600}.example-controls{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid #d7dfd9;padding-top:12px;font-size:22px;color:#486d7b;line-height:1.4}.example-controls label{display:flex;align-items:center;gap:13px;white-space:nowrap}.example-controls input{width:145px;accent-color:#376e80}.example-controls b{width:40px;font-weight:500}.example-controls>span{font-family:Georgia,'PingFang SC',serif;font-size:23px;color:#a45836}.example-result{font-size:23px;color:#a45836;margin-top:13px}.example-note{font-size:18px;color:#6c8288;margin-top:8px}
+.lift-velocity{margin-top:-20px}.example-head{display:grid;grid-template-columns:1fr 1fr;gap:22px;color:#466d7b;font-size:21px;font-weight:600}.plots{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:0}.plots svg{display:block;width:100%;height:215px;overflow:visible}.muted{fill:#71878c;font-size:19px}.coordinate{fill:#4b626b;font-size:22px}.target{fill:#b06442;font-size:21px;font-weight:600}.input{fill:#376e80;font-size:21px;font-weight:600}.example-controls{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid #d7dfd9;padding-top:6px;font-size:21px;color:#486d7b;line-height:1.4}.example-controls label{display:flex;align-items:center;gap:13px;white-space:nowrap}.example-controls input{width:145px;accent-color:#376e80}.example-controls b{width:40px;font-weight:500}.example-controls>span{font-family:Georgia,'PingFang SC',serif;font-size:22px;color:#a45836}.example-note{font-size:18px;color:#6c8288;margin-top:8px}
 </style>

@@ -143,7 +143,7 @@ mdc: true
 
 <LiftTraining />
 
-<div class="talk-footer"><span>蓝箭头为参考目标，实际预测可偏离；循环内固定 xₜ、t；sg 截断目标分支梯度</span><a href="https://arxiv.org/html/2610.05538v1#S2.SS1" target="_blank" rel="noopener">LiFT §2.1 式 (1) / §3.1 ↗</a></div>
+<div class="talk-footer"><span>蓝箭头为参考，预测可偏离；Ktrain：训练循环数；d：速度维数；sg：目标停梯度</span><a href="https://arxiv.org/html/2610.05538v1#S3.SS1" target="_blank" rel="noopener">LiFT §3.1 式 (4–7) ↗</a></div>
 
 ---
 
