@@ -1,0 +1,147 @@
+{
+  "paper": "Looped Diffusion Transformer",
+  "version": "arXiv:2609.40305v1",
+  "source": "https://arxiv.org/pdf/2609.40305v1",
+  "pdfSha256": "bc97f24d5703911433e04b1dfdedbc8f11f931de8a4158cc3592f5335563eaef",
+  "attribution": "Chng et al., 2026",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "renderDpi": 240,
+  "figures": [
+    {
+      "id": "fig2-sma",
+      "page": 2,
+      "box": [
+        70,
+        90,
+        286,
+        316
+      ],
+      "title": "图 2 · SMA 结构（左侧裁切）",
+      "note": "先做 Attention，再在 Concat Heads 与 Wₒ 之前调节输出；两种机制二选一。",
+      "file": "paper-figures/looped-dit/fig2-sma.png",
+      "width": 720,
+      "height": 753
+    },
+    {
+      "id": "fig2",
+      "page": 2,
+      "box": [
+        68,
+        75,
+        544,
+        360
+      ],
+      "title": "图 2 · 完整结构",
+      "note": "原图中的 N 表示循环次数；本汇报统一记为 K。",
+      "file": "paper-figures/looped-dit/fig2.png",
+      "width": 1586,
+      "height": 950
+    },
+    {
+      "id": "table4",
+      "page": 8,
+      "box": [
+        68,
+        436,
+        544,
+        617
+      ],
+      "title": "表 4 · 设计消融",
+      "note": "B/32 四项评测均分：朴素循环 56.2；深监督＋XSA 为 59.1。",
+      "file": "paper-figures/looped-dit/table4.png",
+      "width": 1586,
+      "height": 604
+    },
+    {
+      "id": "table2",
+      "page": 7,
+      "box": [
+        68,
+        162,
+        544,
+        310
+      ],
+      "title": "表 2 · 非循环结构对照",
+      "note": "最后两行匹配训练与单次预测计算：参数 473M / 260M，均分 58.1 / 59.1。",
+      "file": "paper-figures/looped-dit/table2.png",
+      "width": 1586,
+      "height": 493
+    },
+    {
+      "id": "fig1",
+      "page": 1,
+      "box": [
+        68,
+        459,
+        544,
+        705
+      ],
+      "title": "图 1 · 能力、计算与逐轮修正",
+      "note": "图中 FLOPs、参数量、延迟是不同量；3.2× 延迟比属于这组跨模型设置。",
+      "file": "paper-figures/looped-dit/fig1.png",
+      "width": 1586,
+      "height": 820
+    },
+    {
+      "id": "fig4",
+      "page": 6,
+      "box": [
+        68,
+        48,
+        544,
+        270
+      ],
+      "title": "图 4 · 质量—计算量／延迟",
+      "note": "B/16 六项评测均分；横轴均为对数刻度，不与 B/32 四项均分混用。",
+      "file": "paper-figures/looped-dit/fig4.png",
+      "width": 1586,
+      "height": 740
+    },
+    {
+      "id": "fig6",
+      "page": 7,
+      "box": [
+        68,
+        441,
+        544,
+        637
+      ],
+      "title": "图 6 · Loop 与采样步数",
+      "note": "在匹配每图 FLOPs 的对照中，4 轮优于单轮＋更多采样步；各点标记步数。",
+      "file": "paper-figures/looped-dit/fig6.png",
+      "width": 1586,
+      "height": 653
+    },
+    {
+      "id": "fig5",
+      "page": 6,
+      "box": [
+        68,
+        275,
+        544,
+        556
+      ],
+      "title": "图 5 · 逐轮修正的定性样例",
+      "note": "同页比较循环、原始非循环、大模型与 CoT；定性示例不等于完整机制证明。",
+      "file": "paper-figures/looped-dit/fig5.png",
+      "width": 1586,
+      "height": 936
+    },
+    {
+      "id": "table1",
+      "page": 5,
+      "box": [
+        68,
+        65,
+        544,
+        313
+      ],
+      "title": "表 1 · 跨模型评测",
+      "note": "B/16 六项均分 71.5；InternVL-U 69.0。各模型采用官方设置，不是同预算消融。",
+      "file": "paper-figures/looped-dit/table1.png",
+      "width": 1586,
+      "height": 826
+    }
+  ]
+}

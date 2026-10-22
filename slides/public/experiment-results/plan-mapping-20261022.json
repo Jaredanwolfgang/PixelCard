@@ -1,0 +1,66 @@
+{
+  "updated": "2026-10-22",
+  "principle": "Match evidence to the original planned intervention and controls. A related positive result does not pass a different planned gate. Distinguish tested without benefit from not executed.",
+  "paths": [
+    {
+      "id": "A",
+      "original_goal": "复用 SiT 预训练权重，改成共享循环块后微调",
+      "status": "尚未 work",
+      "existing_evidence": "E3.8 共享修正试验：最终 K3 比相近预算 S30 高约 31.5% 终点误差。",
+      "boundary": "完整 Loop 改造未证实。E3.5 的局部保真恢复不能作为该目标通过的证据。"
+    },
+    {
+      "id": "B",
+      "original_goal": "保留已有 Looped-DiT 循环结构，更改 Loss 后继续微调",
+      "status": "尚未验证",
+      "existing_evidence": "仅做冻结策略 / 路由试验，未执行新 Loss 微调对照。",
+      "boundary": "冻结策略没有确认收益，不能据此声称改 Loss 后的微调已经测试或有效。"
+    }
+  ],
+  "stages": {
+    "roles": {
+      "headline": "尚未验证：深浅循环的长短程分工",
+      "evidence": "尚无“深出口长跨度、浅出口短跨度”的配对结果。现有 E3.8 不能证明这项分工。"
+    },
+    "supervision": {
+      "headline": "尚未验证：原 Loss 与分工 Loss 的对照未执行",
+      "evidence": "E3.8 测的是短 rollout 修正，不是这里的长程方向 / 短程残差监督。"
+    },
+    "allocation": {
+      "headline": "现有路由尚未 work，新分配指标尚未验证",
+      "evidence": "旧 Deep/Wide 路由代理得分 0.492，未达 0.53；未检验这里拟议的长程 / 短程指标。"
+    }
+  },
+  "controls": [
+    {
+      "planned": "固定调度，原 Loss 对比分工 Loss",
+      "status": "尚未验证",
+      "missing": "没有对应的新目标微调对照"
+    },
+    {
+      "planned": "固定 checkpoint，同预算固定 / 随机 / 指标调度",
+      "status": "新指标尚未验证",
+      "related_result": "旧 Deep/Wide 状态路由未达到收益门槛"
+    },
+    {
+      "planned": "长程方向误差、短程修正误差、任务分配记录",
+      "status": "尚未验证",
+      "missing": "没有按计划定义的配对机制结果"
+    },
+    {
+      "planned": "同预算生成质量，计入决策开销和真实延迟",
+      "status": "已有方案尚未 work",
+      "related_result": "E3.8 等计算量无优势，冻结 Looped-DiT 等延迟复跑未确认收益；新方案完整验证未做"
+    }
+  ],
+  "tracker": {
+    "report": "refine-logs/EXPERIMENT_TRACKER.md",
+    "run": "shared-prefix-horizon-exits-20261021",
+    "status": "SP001–SP003 TODO, SP101 onward BLOCKED; nothing launched",
+    "sha256": "d2e2fe565f15d87fc3abf7b35410687b76fe610edca3ee6b422b00445cbbaf5b"
+  },
+  "background_evidence": [
+    "E3.5: local fidelity restoration only",
+    "CIFAR three-seed results: historical mechanism test, not the new Looped-DiT loss trial"
+  ]
+}

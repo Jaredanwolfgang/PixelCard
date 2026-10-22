@@ -5,6 +5,7 @@ slides/node_modules/
 
 # next / build
 .next/
+.next-dev/
 out/
 dist/
 build/
@@ -32,3 +33,7 @@ yarn-error.log*
 .idea/
 .vscode/
 *.swp
+
+# local research presentation (unpublished directions)
+slides/*.local.md
+slides/private/

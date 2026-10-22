@@ -1,0 +1,87 @@
+{
+  "paper": "ELT: Elastic Looped Transformers for Visual Generation",
+  "version": "arXiv:2604.09168v3",
+  "source": "https://arxiv.org/pdf/2604.09168v3",
+  "pdfSha256": "ad68af91def00e984fa89e8f805bcbfd90d0c8af9ad770216b07e554d730c316",
+  "attribution": "Goyal et al., 2026",
+  "license": "CC BY-NC-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "renderDpi": 240,
+  "figures": [
+    {
+      "id": "fig2",
+      "page": 2,
+      "box": [
+        60,
+        85,
+        538,
+        339
+      ],
+      "title": "图 2 · Anytime 的含义",
+      "note": "概念示意：ILSD 让中间出口也接近可用输出；图中的 Solution Space 不是在线停止判据。",
+      "file": "paper-figures/elt/fig2.png",
+      "width": 1594,
+      "height": 847
+    },
+    {
+      "id": "fig1",
+      "page": 1,
+      "box": [
+        60,
+        188,
+        538,
+        425
+      ],
+      "title": "图 1 · 同一训练运行，不同循环预算",
+      "note": "原文 L 是本汇报 K；多种循环预算可生成图像，不代表学习了自动停机策略。",
+      "file": "paper-figures/elt/fig1.png",
+      "width": 1594,
+      "height": 790
+    },
+    {
+      "id": "fig3",
+      "page": 5,
+      "box": [
+        60,
+        85,
+        538,
+        361
+      ],
+      "title": "图 3 · 训练与多出口读出",
+      "note": "图中的可选出口表示支持多种深度；一次采样调用按指定预算执行一次共享输出头。",
+      "file": "paper-figures/elt/fig3.png",
+      "width": 1594,
+      "height": 921
+    },
+    {
+      "id": "algorithm2",
+      "page": 25,
+      "box": [
+        60,
+        84,
+        538,
+        323
+      ],
+      "title": "算法 2 · 给定循环预算的推理",
+      "note": "循环次数 L 是算法输入；for range(L) 后读出，没有基于样本状态的停止判断。",
+      "file": "paper-figures/elt/algorithm2.png",
+      "width": 1594,
+      "height": 797
+    },
+    {
+      "id": "fig13",
+      "page": 25,
+      "box": [
+        60,
+        408,
+        538,
+        586
+      ],
+      "title": "图 13 · 多出口与完整 ILSD 消融",
+      "note": "左侧为 DiT，右侧为 masked generation；多出口训练与完整损失分开比较，不把全部早退收益归于蒸馏项。",
+      "file": "paper-figures/elt/fig13.png",
+      "width": 1594,
+      "height": 594
+    }
+  ]
+}

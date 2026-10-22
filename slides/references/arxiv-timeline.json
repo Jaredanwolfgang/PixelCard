@@ -1510,5 +1510,16 @@
       "direct": true,
       "url": "https://arxiv.org/abs/2610.17877"
     }
+  ],
+  "contextEvents": [
+    {
+      "id": "gpt-6-astra",
+      "title": "GPT-6 Astra release",
+      "date": "2026-09-03",
+      "url": "https://openai.com/index/gpt-6-astra/",
+      "dateSource": "https://openai.com/research/index/release/",
+      "checkedAt": "2026-10-21",
+      "interpretation": "Context marker only. September contains both pre- and post-release submissions; monthly corpus records cannot identify a release-induced rise in attention or establish the model architecture."
+    }
   ]
 }

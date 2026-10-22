@@ -1,0 +1,95 @@
+{
+  "paper": "LiFT: Loop Flow Transformers — Loop in Depth, Flow in Time",
+  "version": "arXiv:2610.05538v1",
+  "source": "https://arxiv.org/html/2610.05538v1",
+  "attribution": "Derakhshani, Curvo et al., 2026",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "extraction": "arXiv HTML 官方 SVG / PNG，图表内容未改动",
+  "figures": [
+    {
+      "id": "fig2",
+      "title": "图 2 · Loop in depth, flow in time",
+      "url": "https://arxiv.org/html/2610.05538v1#S3.F2",
+      "originalLabel": "原文 Figure 2 ↗",
+      "note": "(b) u₀ 从 h₀ 经共享读出头得到；(c) 空心点是参考目标，彩色点是实际预测，二者用 MSE 对齐；(d) 训练随机采样内部 s，推理使用均匀网格。",
+      "file": "paper-figures/lift/fig2.svg",
+      "width": 1569,
+      "height": 1107,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/fig5-simple-c.svg",
+      "sha256": "18a5ff2dc45a91b3d5885aefb2cc2791d5ace501ce59b96083bd1b603d47d134"
+    },
+    {
+      "id": "fig3",
+      "title": "图 3 · 深度外推曲线",
+      "url": "https://arxiv.org/html/2610.05538v1#S4.F3",
+      "originalLabel": "原文 Figure 3 ↗",
+      "note": "固定 50 采样步；圆圈标训练深度。不同推理深度的成本不同；同尺度内训练 FLOPs 匹配。",
+      "file": "paper-figures/lift/fig3.svg",
+      "width": 1694,
+      "height": 785,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/matched_training_depth.svg",
+      "sha256": "fd42aab522281f5f1b7e133c4eb5a1855bb856045cfc3cb161ff03aa83512c7e"
+    },
+    {
+      "id": "fig4",
+      "title": "图 4 · FID 与推理计算量",
+      "url": "https://arxiv.org/html/2610.05538v1#S4.F4",
+      "originalLabel": "原文 Figure 4 ↗",
+      "note": "LiFT 固定 50 步增加循环；Dense 改变采样步数。训练计算仅在同尺度内匹配；B/2 未取得优势。",
+      "file": "paper-figures/lift/fig4.svg",
+      "width": 1694,
+      "height": 785,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/matched_training_inference_compute.svg",
+      "sha256": "c57bf04eab291a7972b02c69fe2e881c70963ed6b98e4f65fbe21d71abeac877"
+    },
+    {
+      "id": "fig5",
+      "title": "图 5 · 联合分配深度与步数",
+      "url": "https://arxiv.org/html/2610.05538v1#S4.F5",
+      "originalLabel": "原文 Figure 5 ↗",
+      "note": "L/2 R10；左图为已测配置的预算包络；右图在实测点间插值，不代表连续空间已验证的最优。",
+      "file": "paper-figures/lift/fig5.svg",
+      "width": 1804,
+      "height": 978,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/joint_budget_frontier.svg",
+      "sha256": "7cdaf5ed4b7a83745ed38b862abfea160090a47f375bb6ae79fe06955d6d1e81"
+    },
+    {
+      "id": "fig7",
+      "title": "图 7 · 同类别同噪声的生成样本",
+      "url": "https://arxiv.org/html/2610.05538v1#S4.F7",
+      "originalLabel": "原文 Figure 7 ↗",
+      "note": "作者挑选的配对样本，不代替全量 FID。LiFT 固定 50 步，Dense 使用不同步数；各列成本见图头。",
+      "file": "paper-figures/lift/fig7.png",
+      "width": 739,
+      "height": 880,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/imagenet_qualitative_comparison.png",
+      "sha256": "14bf98f04d47c7232feac4647cf0a77605dc60a24ef5d3b98c358ef33e9ed5da"
+    },
+    {
+      "id": "fig8",
+      "title": "图 8 · 所有 checkpoint 的外推矩阵",
+      "url": "https://arxiv.org/html/2610.05538v1#A1.F8",
+      "originalLabel": "原文 Figure 8 ↗",
+      "note": "框线标训练深度，灰色为未评估；同一色标。不能把不同 checkpoint 的格子当成同一模型轨迹。",
+      "file": "paper-figures/lift/fig8.png",
+      "width": 654,
+      "height": 502,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/depth_generalization_matrix.png",
+      "sha256": "cd7d34a5c637977e713e3d8a7f674b0afe967275a43f8f36c8549f511656da4f"
+    },
+    {
+      "id": "fig9",
+      "title": "图 9 · 步数与循环数的 FID 网格",
+      "url": "https://arxiv.org/html/2610.05538v1#A1.F9",
+      "originalLabel": "原文 Figure 9 ↗",
+      "note": "L/2 R10 的联合扫描，颜色采用对数尺度；不是任意预算下的全局最优保证。",
+      "file": "paper-figures/lift/fig9.png",
+      "width": 571,
+      "height": 271,
+      "downloadUrl": "https://arxiv.org/html/2610.05538v1/joint_budget_heatmap.png",
+      "sha256": "a61098e9a647b66e6b3aa99f0c17487e39debf05549419bce5e876a4284a48b2"
+    }
+  ]
+}

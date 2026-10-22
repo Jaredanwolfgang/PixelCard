@@ -2,8 +2,9 @@
   "name": "pixelcard-slides",
   "private": true,
   "scripts": {
-    "dev": "slidev diffusion-depth-step.md --bind 127.0.0.1",
-    "build": "slidev build diffusion-depth-step.md --base /slide/diffusion-depth-step/ --out ../public/slides/diffusion-depth-step --without-notes"
+    "dev": "slidev diffusion-depth-step.md --bind 127.0.0.1 --port 3031",
+    "build": "slidev build diffusion-depth-step.md --base /slide/diffusion-depth-step/ --out ../public/slides/diffusion-depth-step --without-notes",
+    "build:review": "slidev build diffusion-depth-step.md --base / --out ../dist/loop-research --without-notes"
   },
   "devDependencies": {
     "@slidev/cli": "53.0.0",

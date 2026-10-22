@@ -1,0 +1,146 @@
+{
+  "updated": "2026-10-22",
+  "scope": "Selected completed experiments. No unpublished future method is included.",
+  "sources": [
+    {
+      "id": "cifar",
+      "report": "RESULTS.md",
+      "sha256": "0b7b5d7f91a8c5d58ef67d65eba6177bdf275c45f7a3f9ab391f2418017ce8e8"
+    },
+    {
+      "id": "early",
+      "report": "experiments/counterfactual-budget-routing/e3_5_early_preservation_v1/report.md",
+      "sha256": "cefd5fce06b3bd5201759cc0af896325bf93bc87997704da1e46a45cbc0cdddd"
+    },
+    {
+      "id": "coverage",
+      "report": "experiments/counterfactual-budget-routing/e3_8_fixed_s_coverage_v1/report.md",
+      "sha256": "e17ea27c556dec0e38e3a2cc0f32f6e85b031719ec3e3c37086ed4fbe09e9ae0"
+    },
+    {
+      "id": "noise",
+      "report": "experiments/looped_dit_alloc/v2fix_20261021/RESULTS.md",
+      "sha256": "00be70e23e9928383e9f1b6ab7279b4a995ddc008a3b6d717f04711457684b57"
+    },
+    {
+      "id": "router",
+      "report": "experiments/looped_dit_router/gnode6_router_M0M1_20261021_145453/RESULTS.md",
+      "sha256": "2997a0aefd07adf1872e42faaf1acbc815cf8ae2714add1110702effc650e82f"
+    }
+  ],
+  "cifar": {
+    "unit": "FID-50K, lower is better",
+    "training_steps": 100000,
+    "training_seeds": [
+      0,
+      1,
+      2
+    ],
+    "ddim50": {
+      "fixed": [
+        52.038,
+        51.117,
+        51.306
+      ],
+      "adaptive": [
+        51.877,
+        51.509,
+        51.759
+      ]
+    },
+    "ddim100": {
+      "fixed": [
+        51.678,
+        50.722,
+        50.492
+      ],
+      "adaptive": [
+        51.413,
+        51.212,
+        51.381
+      ]
+    }
+  },
+  "early": {
+    "n_fresh_trajectories": 64,
+    "metric": "mean endpoint latent MSE relative to original Euler20, against Euler400",
+    "early8": 1.023868,
+    "dispersed8": 1.216563,
+    "replacement": 1.439098,
+    "tflops_per_image": 9.290018,
+    "relative_gain_percent": 15.839,
+    "paired_relative_ci_97_5_percent": [
+      7.922,
+      24.421
+    ],
+    "noninferiority_margin_ci_97_5": [
+      -0.022586,
+      -0.008137
+    ]
+  },
+  "coverage": {
+    "n_reused_dev_trajectories": 64,
+    "updates_per_arm": 1824,
+    "epochs": 3,
+    "selected_update": 304,
+    "selected_K3_R20": {
+      "joint": 0.992638,
+      "specialist": 0.990398
+    },
+    "last_K3_R20": {
+      "joint": 0.979954,
+      "specialist": 0.979403
+    },
+    "baseline_S30_R20": 0.745129,
+    "K3_tflops": 14.06585,
+    "S30_tflops": 13.935027,
+    "last_same_S_gain_percent": {
+      "joint": 3.024,
+      "specialist": 3.078
+    },
+    "last_budget_error_increase_percent": {
+      "joint": 31.515,
+      "specialist": 31.441
+    }
+  },
+  "noise": {
+    "n_heldout_prompts": 48,
+    "noises_per_prompt": 2,
+    "out_of": 96,
+    "fixed_K1_K2_K3_K4": [
+      55,
+      60,
+      57,
+      59
+    ],
+    "mixed_vs_fixed_success_count_delta": 5,
+    "mixed_ci95_count_delta": [
+      -5,
+      16
+    ],
+    "carry_vs_stateless_count_delta": -3,
+    "carry_ci95_count_delta": [
+      -10,
+      4
+    ],
+    "evaluation": "auto-judge v2, no human ratings"
+  },
+  "router": {
+    "dev_prompts": 240,
+    "noises_per_prompt": 4,
+    "state_logloss": 0.6932,
+    "constant_logloss": 0.6931,
+    "proxy_z": 0.492,
+    "ci95": [
+      0.473,
+      0.51
+    ],
+    "pass_bar": 0.53,
+    "oracle_z": 0.554,
+    "oracle_ci95": [
+      0.531,
+      0.579
+    ],
+    "evaluation": "auto-judge v2 proxy, no human ratings"
+  }
+}

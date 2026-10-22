@@ -135,10 +135,11 @@ draft: false
 ## 汇报 Slides
 
 - 汇报优先用大字结论和图示，减少段落与多行小字脚注；详细来源、术语和实验条件放在可查阅的参考页，主体仍保留影响结论的关键条件。以论文数量说明近期活跃度时，提供可核对的清单、时间范围和去重规则，区分预印本首发、修订与会议发表，以及直接相关和相邻工作，不把样本数量写成全领域总量。
+- `diffusion-depth-step` 当前唯一可编辑主稿是 `slides/diffusion-depth-step.md`；`slides/diffusion-depth-step.local.md` 只是兼容旧入口的符号链接，不得重建为独立副本。共用 `slides/components/` 和 `slides/references/talk-plan.json`，默认实时预览为 `http://localhost:3031`。修改前重新读取文件和 diff，禁止用另一聊天的旧全文覆盖主稿；两个聊天不要同时编辑主稿。旧版快照在 Git 忽略的 `slides/private/version-backups/`，具体入口见 `slides/README.md`。用户已于 2026-10-22 明确要求部署当前 25 页统一版，授权范围包括本次监督信号设计、有限 Compute 下动态分配长短程任务的 idea 路径及其参考材料；后续新增未公开内容仍按当次公开范围处理。
 - 使用现成的 Slidev，不自行编写翻页引擎。`/slide` 为汇报总目录，`/slide/<slug>` 为各份汇报；目录条目维护在 `src/lib/slides.ts`，博客侧栏有入口。
 - Markdown 与 Vue 源文档位于 `slides/`，编译工具独立安装：`npm --prefix slides ci`，需要 Node.js 22.12+。`npm --prefix slides run dev` 预览；`npm --prefix slides run build` 生成当前汇报，具体入口、`--base /slide/<slug>/` 和输出目录以 `slides/package.json` 为准。新增汇报需同步添加构建命令及目录条目。
 - 编译产物 `public/slides/<slug>/` 是有意跟踪的部署资源，和源文档一起提交。每次修改源文档或组件必须重新编译；Vite 仅清空对应的明确输出目录，不能清理其他汇报。生产构建不安装或执行 Slidev，`.dockerignore` 排除整个 `slides/` 编译工程；只随博客镜像发布静态产物。
-- 公开构建使用 `--without-notes`。发布前检查 Markdown、组件、数据与生成脚本的公开范围，沿用文章的来源标注和 Humanizer 要求；本次 diffusion-depth-step 仅公开既有文献机制和贡献，不加入未公开组合方案或实验 idea。
+- 公开构建使用 `--without-notes`。发布前检查 Markdown、组件、数据与生成脚本的公开范围，沿用文章的来源标注和 Humanizer 要求；diffusion-depth-step 当前 25 页统一版已于 2026-10-22 获用户明确授权发布，包含本次讨论的 idea 路径；不据此扩展到其他未公开方案或材料。
 - 验证总目录、单页深链接刷新、键盘翻页、工具栏全屏、总览、演讲者视图和交互默认值；检查桌面及窄屏布局、资源 MIME、404 与控制台。交互必须有可读默认状态；论文数据与机制示意分开标注，不把网格最佳值声称为全局最优。
 
 ## 验证与 GitHub 推送
