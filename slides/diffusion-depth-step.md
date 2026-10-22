@@ -27,17 +27,17 @@ mdc: true
 
 <div class="cover-axes"><div><b>↻</b><span>更深的内部计算</span></div><i>×</i><div><b>→</b><span>更多的去噪步数</span></div></div>
 
-<div class="cover-bottom"><span>Jaredan · 14 页主体 · 约 20 分钟</span><span>近期进展 → 代表工作 → 计算分配</span></div>
+<div class="cover-bottom"><span>Jaredan</span><span>近期进展 → 代表工作 → 计算分配</span></div>
 
 ---
 
 <div class="eyebrow">01 / 为什么现在关注</div>
 
-# 近期视觉工作集中出现
+# Loop 相关 arXiv 的时间分布
 
 <PaperTimeline />
 
-<div class="talk-footer"><span>本次核实样本 · 按 arXiv 首发去重，非全量统计</span><a href="15">口径与文献 ↗</a></div>
+<div class="talk-footer"><span>题名筛选文献库＋补录 · 非全量；年度与季度长度不同</span><a href="17">口径与文献 ↗</a></div>
 
 ---
 
@@ -53,21 +53,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">03 / ELT · 先行工作</div>
-
-# 一个模型，也可以有多个可用深度
-
-<div class="elt-chain"><span>g</span><i>→</i><span>g</span><i>→</i><span>g</span><i>→</i><span>g</span></div>
-<div class="elt-exits"><div>中间出口<br><b>学生</b></div><span>← 循环内自蒸馏 ←</span><div>最深出口<br><b>在线教师</b></div></div>
-
-<div class="big-statement">浅出口同时学习真值和深出口。</div>
-<p class="single-note">ILSD：同一组共享权重，支持不同循环预算。</p>
-
-<div class="talk-footer"><span>选取中间轮与最深轮的训练示意</span><a href="https://arxiv.org/html/2604.09168v3#S4" target="_blank" rel="noopener">ELT §4 / 图 3 ↗</a></div>
-
----
-
-<div class="eyebrow">04 / LOOPED-DIT · 循环结构</div>
+<div class="eyebrow">03 / LOOPED-DIT · 循环结构</div>
 
 # 循环的是隐状态，不是重新喂入一张图
 
@@ -82,7 +68,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">05 / LOOPED-DIT · 深监督</div>
+<div class="eyebrow">04 / LOOPED-DIT · 深监督</div>
 
 # 不让早期循环只依赖最终出口的梯度
 
@@ -93,7 +79,7 @@ mdc: true
 
 ---
 
-<div class="eyebrow">06 / LOOPED-DIT · 自调节注意力</div>
+<div class="eyebrow">05 / LOOPED-DIT · 自调节注意力</div>
 
 # 已经形成的信息，不必在每轮都大幅改写
 
@@ -105,7 +91,7 @@ XSA：$z=o-(o^\top\hat v_i)\hat v_i$
 
 ---
 
-<div class="eyebrow">07 / LOOPED-DIT · 对照实验</div>
+<div class="eyebrow">06 / LOOPED-DIT · 对照实验</div>
 
 # 两项设计，在这组实验里都带来收益
 
@@ -117,20 +103,53 @@ XSA：$z=o-(o^\top\hat v_i)\hat v_i$
 
 ---
 
-<div class="eyebrow">08 / LOOPREG · 最新进展</div>
 
-# 表征监督，也能塑造有用的循环
+<div class="eyebrow">07 / ELT · 循环内自蒸馏</div>
 
-<div class="representation-flow"><div>共享块 F<br><b>↻ K 次</b></div><span>→</span><div>终点 hₖ<br><b>投影 P</b></div><span>⇄</span><div>冻结 DINOv2<br><b>干净图像特征</b></div></div>
+# 一条共享轨迹，浅出口向深出口学习
 
-<div class="result-pair"><div><span>训练 2 轮 · 推理 2 轮</span><b>14.71</b></div><i>→</i><div><span>同权重 · 推理 3 轮</span><b>5.34</b></div><em>FID ↓</em></div>
-<p class="single-note">监督施加在循环终点；推理不再使用视觉教师。</p>
+<ELTTraining />
 
-<div class="talk-footer"><span>B/2 · 同 checkpoint；Recall 0.631 → 0.508</span><a href="https://arxiv.org/html/2610.17877v1#S4" target="_blank" rel="noopener">LoopREG §3–4 / 表 1 ↗</a></div>
+<div class="talk-footer"><span>ILSD：Intra-Loop Self Distillation · 示意为 4 轮</span><a href="https://arxiv.org/html/2604.09168v3#S4" target="_blank" rel="noopener">ELT §4 / 图 3 ↗</a></div>
+
 
 ---
 
-<div class="eyebrow">09 / LIFT · 训练目标</div>
+
+<div class="eyebrow">08 / ELT · 监督方式</div>
+
+# 教师一直学真值，学生逐渐学教师
+
+$$
+\begin{aligned}
+\mathcal L ={}& \mathcal L_{\mathrm{GT}}(\hat x_{L_{\max}},x_0)\\
+&+\lambda\,\mathcal L_{\mathrm{GT}}(\hat x_{L_{\mathrm{int}}},x_0)\\
+&+(1-\lambda)\,\mathcal L_{\mathrm{dist}}(\hat x_{L_{\mathrm{int}}},\operatorname{sg}(\hat x_{L_{\max}}))
+\end{aligned}
+$$
+
+<div class="curriculum"><span>训练初期<br><b>λ = 1 · 学真值</b></span><i>线性递减 →</i><span>训练后期<br><b>λ = 0 · 学教师</b></span></div>
+
+<div class="talk-footer"><span>sg：只截断蒸馏目标；共享参数仍由真值损失更新</span><a href="https://arxiv.org/html/2604.09168v3#S4" target="_blank" rel="noopener">ELT §4 · 扩散损失使用 w(t) 加权 MSE ↗</a></div>
+
+
+---
+
+
+<div class="eyebrow">09 / ELT · 扩散实验</div>
+
+# 共享参数，保留可用的计算深度
+
+<div class="elt-results"><div class="table-head"><span>结构 N × L</span><span>参数量</span><span>块执行数</span><span>FID ↓</span></div><div><b>DiT · 32 × 1</b><span>2.1B</span><span>32</span><strong>3.43</strong></div><div><b>ELT · 8 × 4</b><span>539M</span><span>32</span><strong>3.16</strong></div><div><b>ELT · 16 × 2</b><span>1.1B</span><span>32</span><strong>2.83</strong></div><div class="under-capacity"><b>ELT · 1 × 32</b><span>69M</span><span>32</span><strong>10.30</strong></div></div>
+
+<div class="big-statement compact-statement">这组实验中，单层共享块仍受容量限制。</div>
+
+<div class="talk-footer"><span>ImageNet 256² · 同执行深度；各行来自不同训练配置</span><a href="https://arxiv.org/html/2604.09168v3#S5.SS2" target="_blank" rel="noopener">ELT 表 2 · 摘要 FID 2.0 属于 MaskGIT ↗</a></div>
+
+
+---
+
+<div class="eyebrow">10 / LIFT · 训练目标</div>
 
 # 不同深度，给不同的中间目标
 
@@ -147,7 +166,7 @@ $$
 
 ---
 
-<div class="eyebrow">10 / LIFT · 计算分配</div>
+<div class="eyebrow">11 / LIFT · 计算分配</div>
 
 # 多 Loop 与多 Step，收益不等价
 
@@ -159,7 +178,7 @@ $$
 
 ---
 
-<div class="eyebrow">11 / LIFT · 收益的边界</div>
+<div class="eyebrow">12 / LIFT · 收益的边界</div>
 
 # 不能只把预算堆到循环深度上
 
@@ -172,7 +191,7 @@ $$
 
 ---
 
-<div class="eyebrow">12 / DEPTH AS TIME</div>
+<div class="eyebrow">13 / DEPTH AS TIME · 内部时间</div>
 
 # 用内部时间，组织共享块的计算
 
@@ -185,19 +204,34 @@ $$
 
 ---
 
-<div class="eyebrow">13 / 回到研究问题</div>
 
-# 先看监督什么，再看计算花在哪里
+<div class="eyebrow">14 / DEPTH AS TIME · 压缩结果</div>
 
-<div class="method-comparison"><div><b>ELT</b><span>浅出口向最深出口蒸馏</span></div><div><b>Looped-DiT</b><span>各出口追同一干净图像，调节注意力更新</span></div><div><b>LoopREG</b><span>循环终点对齐视觉表征</span></div><div><b>LiFT</b><span>各深度追预测空间中的不同参考目标</span></div><div><b>Depth as Time</b><span>匹配教师的层间轨迹与最终输出</span></div></div>
+# 参数压缩，与计算压缩分开看
 
-<div class="closing">最后，在相同预算下比较深度与步数。</div>
+<div class="depth-results"><div><span>MeanFlow 教师</span><b>459M</b><strong>FID 4.01</strong></div><i>→</i><div><span>单共享块 · K = 24</span><b>27.6M</b><strong>11.75 → 4.87</strong><small>轨迹蒸馏 → FD-loss 后训练</small></div></div>
 
-<div class="talk-footer"><a href="15">讲述节奏、口径与参考资料 ↗</a><a href="/blog/diffusion-depth-step" target="_blank">完整文献笔记 ↗</a></div>
+<div class="big-statement compact-statement">参数压缩 16.6 倍，仍执行 24 次共享块。</div>
+<p class="single-note">浅循环需要针对粗时间区间训练；直接少跑会失效。</p>
+
+<div class="talk-footer"><span>ImageNet 256² · FID-50k；学生使用 CFG，非同成本比较</span><a href="https://arxiv.org/html/2610.03626v1#A3" target="_blank" rel="noopener">Depth as Time 附录 C / 表 1–2 ↗</a></div>
+
 
 ---
 
-<div class="eyebrow">参考 / 按需查看，不计入主体 14 页</div>
+<div class="eyebrow">15 / 回到研究问题</div>
+
+# 先看监督什么，再看计算花在哪里
+
+<div class="method-comparison"><div><b>Looped-DiT</b><span>各出口追同一干净图像，调节注意力更新</span></div><div><b>ELT</b><span>浅出口向最深出口蒸馏</span></div><div><b>LiFT</b><span>各深度追预测空间中的不同参考目标</span></div><div><b>Depth as Time</b><span>匹配教师的层间轨迹与最终输出</span></div></div>
+
+<div class="closing">最后，在相同预算下比较深度与步数。</div>
+
+<div class="talk-footer"><a href="17">讲述节奏、口径与参考资料 ↗</a><a href="/blog/diffusion-depth-step" target="_blank">完整文献笔记 ↗</a></div>
+
+---
+
+<div class="eyebrow">参考 / 按需查看，不计入主体 16 页</div>
 
 # 来源、实验设置与统计口径
 

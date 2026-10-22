@@ -1,13 +1,43 @@
 {
-  "mainSlides": 14,
-  "referenceSlide": 15,
+  "mainSlides": 16,
+  "referenceSlide": 17,
   "targetMinutes": 20,
   "sections": [
-    {"pages":"1–4","title":"研究动机、时间线与 ELT","minutes":5,"cue":"用已核实数量交代近期进展；在 K/T 图中分清内部循环与外层采样；说明 ELT 的循环内自蒸馏。"},
-    {"pages":"5–8","title":"Looped-DiT：机制与实验","minutes":6,"cue":"讲清权重如何共享；切换训练与推理读出；用投影图解释 XSA，再读消融与计算匹配对照。"},
-    {"pages":"9","title":"LoopREG：另一种监督方式","minutes":1.5,"cue":"强调表征监督与循环位置共置；FID 的收益伴随 Recall 下降，不能只报最佳数字。"},
-    {"pages":"10–12","title":"LiFT：目标与预算分配","minutes":4.5,"cue":"解释深度相关目标；现场切换两个计算预算；再用过度循环的实测配置说明收益会饱和。"},
-    {"pages":"13","title":"Depth as Time：内部时间","minutes":2,"cue":"把 K 从 4 改到 8：整段内部时间被重新划分，外部生成终点始终相同。"},
-    {"pages":"14","title":"比较与结论","minutes":1,"cue":"比较各篇监督的对象；回到同预算下比较计算分配这一文献问题。"}
+    {
+      "pages": "1–3",
+      "title": "研究动机、年度与季度时间轴",
+      "minutes": 3,
+      "cue": "统计同时展示广义循环 Transformer 和 Loop Diffusion；说明检索样本、Q4 截止日期及年度／季度不可直接比较增速。用 K/T 图区分内部与外部计算。"
+    },
+    {
+      "pages": "4–7",
+      "title": "Looped-DiT：共享结构、深监督与注意力",
+      "minutes": 6,
+      "cue": "依次讲 A/B/C、各轮共享读出、XSA 投影，再读消融和计算匹配对照。四页连续讲完。"
+    },
+    {
+      "pages": "8–10",
+      "title": "ELT：完整 ILSD 流程与扩散结果",
+      "minutes": 4,
+      "cue": "切换学生出口：它是最深路径的前缀。教师目标 stop-gradient，深出口仍学真值；λ 从 1 降至 0。扩散表格与 MaskGIT 摘要结果分开。"
+    },
+    {
+      "pages": "11–13",
+      "title": "LiFT：深度目标与计算分配",
+      "minutes": 4,
+      "cue": "解释深度坐标与参考目标；切换预算并比较实测网格，展示过度循环的边界。"
+    },
+    {
+      "pages": "14–15",
+      "title": "Depth as Time：内部时钟与压缩",
+      "minutes": 2,
+      "cue": "改变 K 重新划分整个内部时间；从参数压缩结果解释 24 次执行与 16.6 倍参数减少的区别，说明 FD-loss 阶段和 CFG 条件。"
+    },
+    {
+      "pages": "16",
+      "title": "监督对象与预算比较",
+      "minutes": 1,
+      "cue": "按四篇论文的监督对象归纳；回到相同预算下比较深度与步数。LoopREG 留在补充资料。"
+    }
   ]
 }

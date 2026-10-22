@@ -1,29 +1,37 @@
 <script setup>
-import data from '../references/loop-diffusion-papers.json'
-const direct = data.papers.filter(p => p.direct)
-const visual = direct.filter(p => p.group === 'visual')
-const recent = visual.filter(p => p.date >= '2026-09-30' && p.date <= '2026-10-13')
-const rows = [data.papers.filter(p => p.date < '2026-09'), data.papers.filter(p => p.date >= '2026-09')]
+import { computed, ref } from 'vue'
+import data from '../references/arxiv-timeline.json'
+const selected = ref(null)
+const periods = [...Array.from({length:8},(_,i)=>({label:String(2018+i),prefix:String(2018+i)})),...Array.from({length:4},(_,i)=>({label:`Q${i+1}`,quarter:i+1}))]
+const matches = (p,b) => b.prefix ? p.date.startsWith(b.prefix) : p.date.startsWith('2026') && Math.ceil(Number(p.date.slice(5,7))/3)===b.quarter
+const bins = periods.map(b=>({...b,papers:data.papers.filter(p=>matches(p,b))})).map(b=>({...b,total:b.papers.length,direct:b.papers.filter(p=>p.direct).length}))
+const rows = [bins.slice(0,8),bins.slice(8)]
+const chosen = computed(()=>bins.find(b=>(b.prefix||`2026 ${b.label}`)===selected.value))
+const choose = b => { selected.value=b.prefix||`2026 ${b.label}` }
 </script>
 
 <template>
-  <div class="paper-timeline">
-    <div class="timeline-stats">
-      <div><b>{{ direct.length }}</b><span>篇直接相关工作</span></div>
-      <div><b>{{ visual.length }}</b><span>篇涉及视觉生成</span></div>
-      <div><b>{{ recent.length }}</b><span>篇视觉新作 / 两周</span></div>
+  <div class="arxiv-timeline" @click.stop @keydown.stop @keydown.esc="selected=null">
+    <div class="timeline-legend"><span class="general">● 广义 Loop / Recurrent Transformer</span><span class="diffusion">● 其中：Loop Diffusion / Flow</span></div>
+    <div v-for="(row,r) in rows" :key="r" class="period-row">
+      <div class="period-label"><b>{{ r===0 ? '2018–2025' : '2026' }}</b><span>{{ r===0 ? '每年' : '每季度' }}</span></div>
+      <div class="period-track" :class="{quarterly:r===1}">
+        <button v-for="b in row" :key="b.label" class="period" :aria-label="`${b.prefix||'2026 '+b.label}：广义 ${b.total} 篇，Loop Diffusion ${b.direct} 篇，查看清单`" @click="choose(b)">
+          <div class="period-count"><b>{{ b.total }}</b><em>{{ b.direct }}</em></div>
+          <div class="stems"><i :style="{height:(b.total/55*48)+'px'}"></i><i class="diffusion-stem" :style="{height:(b.direct/55*48)+'px'}"></i></div>
+          <span class="period-dot"></span><time>{{ b.label }}</time><small v-if="b.label==='Q4'">截至 10/21</small>
+        </button>
+      </div>
     </div>
-    <div v-for="(row,i) in rows" :key="i" class="timeline-row" :style="{'--columns':row.length}">
-      <a v-for="p in row" :key="p.id" :href="p.url" target="_blank" rel="noopener" class="paper-card" :class="{adjacent: !p.direct, masked:p.group==='masked'}">
-        <time :datetime="p.date">{{ p.date.slice(5).replace('-','.') }}</time>
-        <strong>{{ p.name }}</strong>
-        <span>{{ p.summary }}</span>
-      </a>
+    <p class="sample-note">检索样本 {{ data.papers.length }} 篇 · 点击数字查看清单 · 0 表示样本未收录</p>
+    <div v-if="chosen" class="timeline-dialog" role="region" :aria-label="selected+'论文清单'" @keydown.esc="selected=null">
+      <div class="dialog-title"><b>{{ selected }} · {{ chosen.total }} 篇 / Diffusion {{ chosen.direct }} 篇</b><button aria-label="关闭论文清单" @click="selected=null">关闭 ×</button></div>
+      <p>综述题名筛选＋补录；非 arXiv 全库统计</p>
+      <div class="dialog-list"><a v-for="p in chosen.papers" :key="p.id" :href="p.url" target="_blank" rel="noopener"><time>{{ p.date }}</time><span>{{ p.title }}</span><b v-if="p.direct">Diffusion</b></a><p v-if="!chosen.total">当前样本没有收录该年度记录，不能据此认定该年没有相关工作。</p></div>
     </div>
-    <div class="timeline-caption">2026 年首发时间线 · 蓝：视觉 · 棕：语言／结构化生成 · 虚线：相邻工作，不计入 6 篇</div>
   </div>
 </template>
 
 <style scoped>
-.timeline-stats{display:flex;gap:40px;align-items:center;margin:20px 0 29px}.timeline-stats>div{display:flex;gap:13px;align-items:center}.timeline-stats b{font-size:51px;line-height:1;color:#ac603e;font-weight:650}.timeline-stats span{font-size:20px;max-width:235px;line-height:1.45;color:#4a6671}.timeline-row{display:grid;grid-template-columns:repeat(var(--columns),1fr);gap:16px;position:relative;padding-top:12px;margin-top:17px}.timeline-row:before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:#b8c9cc}.paper-card{position:relative;display:flex;flex-direction:column;gap:6px;background:#e8eff0;border:1px solid #cad9dc!important;border-radius:10px;padding:11px 16px;text-decoration:none!important}.paper-card:before{content:'';position:absolute;left:23px;top:-17px;width:8px;height:8px;border-radius:50%;background:#58808d;box-shadow:0 0 0 4px #f8f6f0}.paper-card time{font-size:19px;color:#64818b;line-height:1.2}.paper-card strong{font-size:23px;color:#264e5f!important;font-weight:600;line-height:1.4}.paper-card span{font-size:18px;color:#617b84;line-height:1.4}.paper-card.masked{background:#f0e8dc;border-color:#e2d2bd!important}.paper-card.masked:before{background:#b4825b}.paper-card.masked strong{color:#8f6441!important}.paper-card.adjacent{background:transparent;border:1px dashed #aebbbd!important}.paper-card.adjacent strong{color:#71828a!important;font-size:21px}.timeline-caption{font-size:16px;color:#6b7e84;margin-top:18px}
+.arxiv-timeline{position:relative;margin-top:14px}.timeline-legend{display:flex;gap:35px;font-size:21px;margin-bottom:13px}.general{color:#3d7182}.diffusion{color:#b06442}.period-row{display:flex;align-items:center;gap:22px;margin:10px 0}.period-label{width:132px;flex-shrink:0;display:flex;flex-direction:column;color:#68818a}.period-label b{font-size:22px;font-weight:550}.period-label span{font-size:19px;margin-top:2px}.period-track{display:grid;grid-template-columns:repeat(8,1fr);width:100%;gap:12px}.period-track.quarterly{grid-template-columns:repeat(4,1fr);gap:30px}.period{position:relative;display:flex;flex-direction:column;align-items:center;background:none;border:0;color:#486675;padding:0 0 4px;cursor:pointer;font:inherit}.period-count{display:flex;align-items:center;gap:13px;height:38px}.period-count b{font-size:32px;font-weight:600;color:#3d7182}.period-count em{font-size:24px;font-style:normal;color:#b06442}.stems{height:52px;display:flex;gap:9px;align-items:flex-end;justify-content:center;width:100%;border-bottom:2px solid #bacbc9}.stems i{display:block;width:10px;min-height:2px;background:#6a96a2;border-radius:3px 3px 0 0}.stems .diffusion-stem{background:#bd805b}.period-dot{width:8px;height:8px;background:#819d9f;border-radius:50%;margin-top:-5px}.period time{font-size:21px;margin-top:5px}.period small{font-size:16px;position:absolute;top:122px;color:#b06442;white-space:nowrap}.sample-note{font-size:18px!important;margin-top:21px!important;color:#72878e}.timeline-dialog{position:absolute;inset:-10px -2px -20px;background:#f8f6f0;z-index:4;border:1px solid #afc2c5;border-radius:10px;padding:20px 24px;box-shadow:0 10px 40px #20394325}.dialog-title{display:flex;align-items:center;justify-content:space-between;font-size:23px}.dialog-title>b{color:#3d7182}.dialog-title button{font:inherit;font-size:19px;color:#a56644;background:transparent;border:0;cursor:pointer}.timeline-dialog>p{font-size:18px;margin:8px 0 12px}.dialog-list{height:238px;overflow:auto;overscroll-behavior:contain}.dialog-list>a{display:grid;grid-template-columns:100px 1fr 80px;gap:15px;padding:8px 0;border-bottom:1px solid #d8dfdb;font-size:17px;text-decoration:none;color:#3d7182}.dialog-list time{color:#7f9095}.dialog-list b{font-size:15px;color:#b06442;font-weight:500}@media print{.timeline-dialog{display:none}}
 </style>

@@ -74,7 +74,7 @@ npm --prefix slides run build
 
 展示时方向键翻页，`O` 总览；工具栏可全屏或进入演讲者视图。公开构建使用 `--without-notes`，不打包演讲备注。交互图中的预算统计使用论文原始网格，不作插值。
 
-当前汇报为 14 页主体＋1 页交互参考资料，建议讲述约 20 分钟。近期论文时间线的数据与纳入口径保存在 `slides/references/loop-diffusion-papers.json`；讲述节奏保存在 `slides/references/talk-plan.json`。数量按 arXiv 首发去重，直接相关与相邻工作分别计算，不是全领域总量或会议录用数量。
+当前汇报为 16 页主体＋1 页交互参考资料，建议讲述约 20 分钟。年度／季度时间轴使用 `slides/references/arxiv-timeline.json`，包含固定版本的公开综述元数据题名筛选、补录记录与排除规则；扩散文献清单与纳入口径保存在 `slides/references/loop-diffusion-papers.json`；讲述节奏保存在 `slides/references/talk-plan.json`。数量按 arXiv 首发去重，直接相关与相邻工作分别计算，不是全领域总量或会议录用数量。
 
 ## Docker 部署
 
