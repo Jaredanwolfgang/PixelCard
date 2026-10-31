@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "slidev diffusion-depth-step.md --bind 127.0.0.1 --port 3031",
     "build": "slidev build diffusion-depth-step.md --base /slide/diffusion-depth-step/ --out ../public/slides/diffusion-depth-step --without-notes",
-    "build:review": "slidev build diffusion-depth-step.md --base / --out ../dist/loop-research --without-notes"
+    "build:review": "slidev build diffusion-depth-step.md --base / --out ../dist/loop-research --without-notes",
+    "dev:rsi": "PIXELCARD_SLIDE_DECK=rsi-for-infra slidev rsi-for-infra.md --bind 127.0.0.1 --port 3032",
+    "build:rsi": "PIXELCARD_SLIDE_DECK=rsi-for-infra slidev build rsi-for-infra.md --base /slide/rsi-for-infra/ --out ../public/slides/rsi-for-infra --without-notes"
   },
   "devDependencies": {
     "@slidev/cli": "53.0.0",

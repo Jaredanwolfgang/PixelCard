@@ -21,7 +21,7 @@ export default function SlidesPage() {
           <article className={styles.card} key={deck.slug}>
             <Link href={`/slide/${deck.slug}`} className={styles.preview} aria-label={`打开汇报：${deck.title}`}>
               <span className={styles.number}>{String(index + 1).padStart(2, "0")}</span>
-              <div className={styles.diagram} aria-hidden="true"><span>Depth<br /><b>↻</b></span><i>×</i><span>Step<br /><b>→</b></span></div>
+              <div className={styles.diagram} aria-hidden="true"><span>{deck.preview[0]}<br /><b>↻</b></span><i>×</i><span>{deck.preview[1]}<br /><b>→</b></span></div>
               <span className={styles.play}>打开汇报 ↗</span>
             </Link>
             <div className={styles.body}>
@@ -29,7 +29,7 @@ export default function SlidesPage() {
               <h2><Link href={`/slide/${deck.slug}`}>{deck.title}</Link></h2>
               <p>{deck.description}</p>
               <div className={styles.tags}>{deck.topics.map((topic) => <span key={topic}>{topic}</span>)}</div>
-              <div className={styles.bottom}><span>{deck.pages} 页 · {deck.duration}</span><Link href={deck.article}>阅读调研笔记 →</Link></div>
+              <div className={styles.bottom}><span>{deck.pages} 页 · {deck.duration}</span><Link href={deck.article}>{deck.readingLabel}</Link></div>
             </div>
           </article>
         ))}

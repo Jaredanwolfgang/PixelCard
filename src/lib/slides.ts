@@ -2,6 +2,7 @@
 export const slideDecks = [
   {
     slug: "diffusion-depth-step",
+    preview: ["Depth", "Step"],
     title: "Diffusion 的计算，该花在深度还是步数上？",
     description: "Loop 文献机制与后续 idea：监督信号设计，以及有限 Compute 下动态分配长短程任务。",
     date: "2026-10-22",
@@ -10,5 +11,19 @@ export const slideDecks = [
     version: "文献与研究设想版",
     topics: ["Diffusion", "Loop Transformer", "计算分配"],
     article: "/blog/diffusion-depth-step",
+    readingLabel: "阅读调研笔记 →",
+  },
+  {
+    slug: "rsi-for-infra",
+    preview: ["Agent", "Infra"],
+    title: "Recursive Self-Improving Agents for AI Infrastructure",
+    description: "RSI 分类、Infra Agent 机制，以及国产 Arm 平台上的实验计划、性能观测与优化方向。",
+    date: "2026-10-08",
+    pages: 33,
+    duration: "约 30 分钟",
+    version: "RSI for Infra v3",
+    topics: ["RSI", "AI Infrastructure", "Kernel 优化"],
+    article: "/slide/rsi-for-infra/source.pdf",
+    readingLabel: "查看原始 PDF →",
   },
 ];

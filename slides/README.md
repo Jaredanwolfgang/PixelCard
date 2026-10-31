@@ -1,4 +1,18 @@
-# Loop Diffusion 汇报：统一版本入口
+# Slidev 汇报
+
+## RSI for Infra
+
+- 主稿：`rsi-for-infra.md`，33 页；沿用 Loop Diffusion 的共享样式。
+- 原始 PDF 与原图：`public/rsi-for-infra/`；图像可在汇报中点击放大。
+- `public/rsi-for-infra/style.css` 仅为本汇报增加带 `.rsi-deck` 前缀的布局。RSI 命令通过 `PIXELCARD_SLIDE_DECK` 选择独立静态目录，避免打包其他汇报图片；Vite 在入口加载样式，支持任意页深链接。
+- `npm --prefix slides run dev:rsi`：`http://localhost:3032/`。
+- `npm --prefix slides run build:rsi`：生成 `../public/slides/rsi-for-infra/`，公开构建不含演讲备注。
+- 站点入口：`/slide/rsi-for-infra`；依据用户更正后的 `RSI-for-infra-v3.pdf`（25 页），保留原稿署名日期 2026-10-08。
+- 原稿映射：1→1；2→2；3→3、8；4→4；5→5；6→6；7→7、33；8→8–10；9→11；10→12；11–16→13–18；17→19；18→20–21；19→22–24；20→24；21→25；22→26–27；23→28；24→29–30；25→31。32–33 为来源和阅读状态。
+- 核对记录：`references/rsi-for-infra-sources.json`。Recursive 旧链接迁移到 `/updates/`；FlashAttention 数字按 AlphaEvolve v1 §3.3.4 修正为 32%。原稿硬件拓扑按原样保留，不将它视为经过外部核实的规格。
+- 所有实验曲线均来自用户提供的 v3，未从截图估计新数据。计划中的逐比特确定性、MFU 40% 与预算申请均明确标为计划，已有 Profile 不当作优化后收益。MFU 在 CPU 平台上的分母需要统一精度与峰值口径。
+
+## Loop Diffusion 汇报：统一版本入口
 
 这份汇报于 2026-10-22 合并两个聊天的修改。以后只维护一份主稿，不再分别编辑“本地版”和“普通版”。
 

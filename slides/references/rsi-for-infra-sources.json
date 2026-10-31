@@ -1,0 +1,85 @@
+{
+  "source_pdf": "RSI-for-infra-v3.pdf",
+  "source_sha256": "25a7cc0214a7046a87ab56afa05ffd4d79f2644ba3fb1c2db9ed6c1f5df381eb",
+  "source_pages": 25,
+  "slide_pages": 33,
+  "source_date": "2026-10-08",
+  "checked_at_asia_shanghai": "2026-10-31",
+  "sources": [
+    {
+      "id": "taxonomy",
+      "title": "A Taxonomy of Self-evolving Agents",
+      "url": "https://lsl.zone/blog/2026/a-taxonomy-of-self-evolving-agents/",
+      "published": "2026-07-08",
+      "read": "正文；分类框架"
+    },
+    {
+      "id": "gepa",
+      "title": "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
+      "url": "https://arxiv.org/abs/2507.19457",
+      "read": "背景引用与摘要；未精读"
+    },
+    {
+      "id": "ace",
+      "title": "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models",
+      "url": "https://arxiv.org/abs/2510.04618",
+      "read": "背景引用与摘要；未精读"
+    },
+    {
+      "id": "mem0",
+      "title": "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory",
+      "url": "https://arxiv.org/abs/2504.19413",
+      "read": "背景引用与摘要；未精读"
+    },
+    {
+      "id": "sia",
+      "title": "SIA: Self Improving AI with Harness & Weight Updates",
+      "url": "https://arxiv.org/html/2605.27276v1",
+      "read": "机制与评测任务，§5–6；未复现"
+    },
+    {
+      "id": "alphaevolve",
+      "title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery",
+      "url": "https://arxiv.org/html/2506.13131v1",
+      "read": "§2、§3.3；未复现",
+      "correction": "FlashAttention 从原稿 32.5% 改为原论文 §3.3.4 的 32%"
+    },
+    {
+      "id": "recursive",
+      "title": "First Steps Toward Automated AI Research",
+      "url": "https://recursive.com/updates/first-steps-toward-automated-ai-research",
+      "published": "2026-06-11",
+      "read": "官方报告设置、表格、方法与验证；未复现",
+      "correction": "旧 /articles/ 链接迁移到 /updates/"
+    },
+    {
+      "id": "kernelevolve",
+      "title": "KernelEvolve: Scaling Agentic Kernel Coding for Heterogeneous AI Accelerators at Meta",
+      "url": "https://arxiv.org/html/2512.23236v4",
+      "read": "架构与摘要；吞吐数据另核对 Meta 官方文章，未复现",
+      "case_source": "https://engineering.fb.com/2026/04/02/developer-tools/kernelevolve-how-metas-ranking-engineer-agent-optimizes-ai-infrastructure/"
+    },
+    {
+      "id": "accelopt",
+      "title": "AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization",
+      "url": "https://arxiv.org/abs/2511.15915v2",
+      "read": "摘要；仅延伸阅读，未精读"
+    },
+    {
+      "id": "asari",
+      "title": "Speeding up end-to-end inference with self-improving agents",
+      "url": "https://asari.ai/blog/inference-optimization",
+      "published": "2026-07-28",
+      "read": "官方流程、评估、验证与经验复用；未复现"
+    },
+    {
+      "id": "glm",
+      "title": "Toward Recursive Self-Improvement: How GLM Built Its Own Inference Infrastructure",
+      "url": "https://z.ai/blog/glm-built-its-inference-infrastructure",
+      "read": "官方正文检索结果、反馈机制与原稿引用图；未复现"
+    }
+  ],
+  "experiment_evidence": "来自用户 v3 的截图与文字，保留原图，不估计缺失原始数据；现有观测与计划分别标注。MFU 40% 是期望，确定性 bitwise 全等是计划，均未声称已实现。",
+  "figures": "AlphaEvolve、SIA、KernelEvolve、Asari、GLM 图片沿用原稿并标明来源；LX2 与实验图沿用用户原稿。",
+  "mfu_note": "CPU 的 MFU 分母须核实同精度硬件峰值、设备范围与模型计算量；原图不重新核算。"
+}
