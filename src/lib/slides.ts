@@ -1,6 +1,19 @@
 // Add a catalog entry after compiling a deck into public/slides/<slug>/.
 export const slideDecks = [
   {
+    slug: "dust-lora",
+    preview: ["DUST", "LoRA"],
+    title: "DUST-LoRA：无反向传播的低秩适配",
+    description: "输出扰动与完整切空间的理论推导，以及 E2E、Qwen2.5 和 Natural Questions 的质量与资源实验。",
+    date: "2026-11-05",
+    pages: 21,
+    duration: "约 25 分钟",
+    version: "项目答辩",
+    topics: ["DUST", "LoRA", "分布式训练"],
+    article: "https://github.com/walawalagoose/parallel_dml_hw",
+    readingLabel: "查看项目仓库 →",
+  },
+  {
     slug: "diffusion-depth-step",
     preview: ["Depth", "Step"],
     title: "Diffusion 的计算，该花在深度还是步数上？",
