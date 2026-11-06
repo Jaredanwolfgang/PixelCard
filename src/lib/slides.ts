@@ -6,7 +6,7 @@ export const slideDecks = [
     title: "LingSheng × PyTorch：协作框架与知识库",
     description: "从内核、通信到内存的模块接口，Agent 修改边界、Git 协作与知识库工作流。",
     date: "2026-11-05",
-    pages: 18,
+    pages: 38,
     duration: "约 25 分钟",
     version: "协作方案",
     topics: ["PyTorch", "Agent", "知识库"],

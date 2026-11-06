@@ -13,3 +13,5 @@
 .slidev-layout.slidev-layout .columns.compact{margin-top:24px}
 .slidev-layout.slidev-layout strong{color:inherit;font-weight:700}
 .slidev-layout.slidev-layout p{opacity:1}
+
+.layer-map{display:grid;gap:7px;margin-top:0}.layer-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.layer-box{background:#dcebe2;border-left:3px solid #8bac9c;padding:7px 10px;min-height:46px}.layer-box.full{grid-column:1/-1}.layer-box b,.layer-box span{display:block}.layer-box b{font-size:13px;line-height:1.35}.layer-box em{font-style:normal;color:#c75539;font-size:12px}.layer-box span{color:#56716b;font-size:11px;line-height:1.4;margin-top:3px}.map-foot{border-top:1px solid #9ab0a4;margin-top:11px;padding-top:8px;font-size:12px;color:#39554e}.map-foot span{float:right;color:#71847b}

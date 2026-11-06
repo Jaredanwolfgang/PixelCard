@@ -9,13 +9,26 @@ export default {
   plugins: [{
     name: "clean-generated-html",
     configResolved(config) { base = config.base; },
+    configureServer(server) {
+      if (!isLingSheng) return;
+      server.middlewares.use((req, res, next) => {
+        const end = res.end;
+        res.end = function (chunk, ...args) {
+          if (typeof chunk === "string" && chunk.includes("</head>")) {
+            chunk = chunk.replace("</head>", `<link rel="stylesheet" href="${base}lingsheng-theme.css">\n</head>`);
+          }
+          return end.call(this, chunk, ...args);
+        };
+        next();
+      });
+    },
     transformIndexHtml: {
       order: "post",
       handler: (html) => {
         const clean = html.replace(/[\t ]+$/gm, "");
         // Load deck styles before any slide, including direct numbered routes.
         return isRsi || isDust || isLingSheng
-          ? clean.replace("</head>", `<link rel="stylesheet" href="${base}style.css">\n</head>`)
+          ? clean.replace("</head>", `<link rel="stylesheet" href="${base}${isLingSheng ? 'lingsheng-theme.css' : 'style.css'}">\n</head>`)
           : clean;
       },
     },
