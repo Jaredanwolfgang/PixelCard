@@ -19,7 +19,7 @@ export const slideDecks = [
     title: "DUST-LoRA：无反向传播的低秩适配",
     description: "输出扰动与完整切空间的理论推导，以及 E2E、Qwen2.5 和 Natural Questions 的质量与资源实验。",
     date: "2026-11-05",
-    pages: 21,
+    pages: 27,
     duration: "约 25 分钟",
     version: "项目答辩",
     topics: ["DUST", "LoRA", "分布式训练"],

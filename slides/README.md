@@ -60,3 +60,10 @@ npm --prefix slides run build:review
 - 后续方向按 idea 路径讲述，先行实验作为详情和参考资料，不用进度标签打断主线。
 
 旧版本与合并前的编译产物均已备份；不要把快照复制回主稿来继续编辑。
+
+## DUST-LoRA 答辩汇报
+
+- 当前入口：`/slide/dust-lora/`；汇报共 27 页（含 10 页附录）。
+- 主稿与图片：`slides/dust-lora-html/index.html` 和 `slides/dust-lora-html/figures/`。HTML 包含分步动画及本地资源，保留原有内容与交互。
+- `npm --prefix slides run dev:dust` 在 `http://127.0.0.1:3033/slide/dust-lora/` 本地预览，可用 `PORT` 指定端口。
+- `npm --prefix slides run build:dust` 将 HTML 与资源复制到 `public/slides/dust-lora/`，供原有站点入口使用。旧 Slidev 主稿 `slides/dust-lora.md` 保留作历史参考，构建不再读取它。
