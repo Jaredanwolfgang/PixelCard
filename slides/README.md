@@ -1,5 +1,11 @@
 # Slidev 汇报
 
+## LingSheng × PyTorch 协作框架
+
+- 主稿：`lingsheng-collaboration.md`；独立主题：`public/lingsheng-collaboration/style.css`。
+- `npm --prefix slides run dev:lingsheng`：本地预览；`npm --prefix slides run build:lingsheng`：生成公开静态文件，不包含演讲备注。
+- 博客入口：`/slide/lingsheng-collaboration`。内容依据项目协作、任务边界和知识库文档整理，具体任务授权以项目最新记录为准。
+
 ## RSI for Infra
 
 - 主稿：`rsi-for-infra.md`，33 页；沿用 Loop Diffusion 的共享样式。

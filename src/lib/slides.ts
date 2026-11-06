@@ -1,6 +1,19 @@
 // Add a catalog entry after compiling a deck into public/slides/<slug>/.
 export const slideDecks = [
   {
+    slug: "lingsheng-collaboration",
+    preview: ["Torch", "Agent"],
+    title: "LingSheng × PyTorch：协作框架与知识库",
+    description: "从内核、通信到内存的模块接口，Agent 修改边界、Git 协作与知识库工作流。",
+    date: "2026-11-05",
+    pages: 18,
+    duration: "约 25 分钟",
+    version: "协作方案",
+    topics: ["PyTorch", "Agent", "知识库"],
+    article: "https://gitcode.com/C2-LLM-Optimization/general-torch-optimization",
+    readingLabel: "查看项目仓库 →",
+  },
+  {
     slug: "dust-lora",
     preview: ["DUST", "LoRA"],
     title: "DUST-LoRA：无反向传播的低秩适配",

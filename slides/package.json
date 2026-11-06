@@ -8,7 +8,9 @@
     "dev:rsi": "PIXELCARD_SLIDE_DECK=rsi-for-infra slidev rsi-for-infra.md --bind 127.0.0.1 --port 3032",
     "build:rsi": "PIXELCARD_SLIDE_DECK=rsi-for-infra slidev build rsi-for-infra.md --base /slide/rsi-for-infra/ --out ../public/slides/rsi-for-infra --without-notes",
     "dev:dust": "PIXELCARD_SLIDE_DECK=dust-lora slidev dust-lora.md --bind 127.0.0.1 --port 3033",
-    "build:dust": "PIXELCARD_SLIDE_DECK=dust-lora slidev build dust-lora.md --base /slide/dust-lora/ --out ../public/slides/dust-lora --without-notes"
+    "build:dust": "PIXELCARD_SLIDE_DECK=dust-lora slidev build dust-lora.md --base /slide/dust-lora/ --out ../public/slides/dust-lora --without-notes",
+    "dev:lingsheng": "PIXELCARD_SLIDE_DECK=lingsheng-collaboration slidev lingsheng-collaboration.md --bind 127.0.0.1 --port 3034",
+    "build:lingsheng": "PIXELCARD_SLIDE_DECK=lingsheng-collaboration slidev build lingsheng-collaboration.md --base /slide/lingsheng-collaboration/ --out ../public/slides/lingsheng-collaboration --without-notes"
   },
   "devDependencies": {
     "@slidev/cli": "53.0.0",
