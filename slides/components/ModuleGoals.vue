@@ -12,11 +12,11 @@ onMounted(()=>window.addEventListener('keydown',onKey,true)); onUnmounted(()=>wi
 <template>
 <div class="goal-list" @click.stop @keydown.stop>
  <div class="goal-grid"><button v-for="item in items" :key="item.id" :aria-label="`查看 ${item.id} ${item.title} 的目标和指标`" @click="open($event,item)"><small>{{ item.id }}</small><b>{{ item.title }}</b><span>查看交付与指标 ↗</span></button></div>
- <p class="goal-hint">点击模块查看首项交付、衡量指标和建议验收；具体任务执行前冻结。</p>
+ <p class="goal-hint">点击模块查看目标、指标和交叉复核分工。</p>
  <div v-if="selected" class="goal-overlay" @click.self="close"><section class="goal-dialog" role="dialog" aria-modal="true" aria-labelledby="goal-title">
   <div class="goal-head"><div><small>{{ selected.id }} / 模块目标</small><h2 id="goal-title">{{ selected.title }}</h2></div><button ref="closeButton" class="goal-close" aria-label="关闭目标详情" @click="close">×</button></div>
-  <div class="goal-body"><div><h3>首项交付</h3><p>{{ selected.deliverable }}</p></div><div><h3>如何衡量</h3><p>{{ selected.metrics }}</p></div><div><h3>{{ selected.kind }}</h3><p>{{ selected.target }}</p></div><div><h3>共同约定</h3><p v-if="selected.kind==='性能任务建议'">性能建议值：目标集配对加速比几何均值 ≥ 1.05、95% 区间下界 &gt; 1.00；保护项耗时比 95% 上界 ≤ 1.03，峰值内存 ≤ 基线 1.05 倍且满足上限。由任务负责人在测量前冻结。</p><p v-else-if="selected.kind==='能力任务建议'">声明的必测集合全部通过，新增失败为零；skip 不计为通过。既有功能满足回归和资源预算。</p><p v-else>组合验证按冻结的正确性、回归、资源和质量合同记录，建议值在执行前确定。</p></div></div>
-  <div class="goal-foot">依据 docs/lingsheng-collaborator-task-packages.md；建议目标不是已取得的结果 · Esc 返回</div>
+  <div class="goal-body"><div><h3>首项交付</h3><p>{{ selected.deliverable }}</p></div><div><h3>如何衡量</h3><p>{{ selected.metrics }}</p></div><div><h3>{{ selected.kind }}</h3><p>{{ selected.target }}</p></div><div><h3>交叉复核与接口接收</h3><p>{{ selected.reviewers }}：{{ selected.reviewFocus }}。</p></div><div><h3>共同约定</h3><p v-if="selected.kind==='性能任务建议'">性能建议值：目标集配对加速比几何均值 ≥ 1.05、95% 区间下界 &gt; 1.00；保护项耗时比 95% 上界 ≤ 1.03，峰值内存 ≤ 基线 1.05 倍且满足上限。由任务负责人在测量前冻结。</p><p v-else-if="selected.kind==='能力任务建议'">声明的必测集合全部通过，新增失败为零；skip 不计为通过。既有功能满足回归和资源预算。</p><p v-else>组合验证按冻结的正确性、回归、资源和质量合同记录，建议值在执行前确定。</p></div></div>
+  <div class="goal-foot">复核方按受影响接口选择，人员待分配；目标为建议值 · Esc 返回</div>
  </section></div>
 </div>
 </template>
